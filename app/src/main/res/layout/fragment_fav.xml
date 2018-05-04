@@ -1,0 +1,16 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="amrhal.example.com.discovermovies2.FavFragment"
+    android:id="@+id/frame_layout">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:alpha="0.2"
+        android:text="@string/hello_blank_fragment"
+        android:background="#ff8d8d"/>
+
+</FrameLayout>
