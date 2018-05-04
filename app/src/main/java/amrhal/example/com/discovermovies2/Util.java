@@ -19,7 +19,9 @@ public class Util {
 
     public static String pic_base_url = "http://image.tmdb.org/t/p/";
     public static String pic_size_url = "w185";
-    static String posterUrl;
+    static String posterPathUrl;
+    static String posterBackUrl;
+
 
     public static List<MovieModel> parseJsonCTList(String json) {
         List<MovieModel> listOfMovies = new ArrayList<>();
@@ -35,8 +37,8 @@ public class Util {
 
                 String movieName = jsonObject.getString(movieTitle);
                 String posterPath = jsonObject.getString("poster_path");
-                posterUrl = pic_base_url + pic_size_url + posterPath;
-                MovieModel movieModel = new MovieModel(movieName, posterUrl);
+                posterPathUrl = pic_base_url + pic_size_url + posterPath;
+                MovieModel movieModel = new MovieModel(movieName, posterPathUrl);
                 listOfMovies.add(movieModel);
 
             }
@@ -66,13 +68,22 @@ public class Util {
 
             String movieName = jsonObject.getString(movieTitle);
             String movieAvg = jsonObject.getString("vote_average");
-            String movieReleasDate = jsonObject.getString("release_date").substring(0,7);
+            String movieReleasDate = jsonObject.getString("release_date").substring(0, 7);
 
             String movieOverview = jsonObject.getString("overview");
             String posterPath = jsonObject.getString("poster_path");
-            posterUrl = pic_base_url + pic_size_url + posterPath;
-            Log.e("TAG", "parsejsonCTmovieObject: " + movieName + "." + movieReleasDate + "." +movieAvg + "." + movieOverview);
-            MovieModel movieModel = new MovieModel(movieName, posterUrl, movieReleasDate, movieAvg, movieOverview);
+
+            String original_language = jsonObject.getString("original_language");
+            String original_title = jsonObject.getString("original_title");
+            String id = jsonObject.getString("id");
+            String posterback = jsonObject.getString("backdrop_path");
+            boolean adult = jsonObject.getBoolean("adult");
+
+            posterPathUrl = pic_base_url + pic_size_url + posterPath;
+            posterBackUrl = pic_base_url + pic_size_url + posterback;
+
+            Log.e("TAG", "parsejsonCTmovieObject: " + movieName + "." + movieReleasDate + "." + movieAvg + "." + movieOverview);
+            MovieModel movieModel = new MovieModel(movieName, posterPathUrl, movieReleasDate, movieAvg, movieOverview,original_language,original_title,id,posterBackUrl,adult);
 
             return movieModel;
 
@@ -81,6 +92,6 @@ public class Util {
             Log.e("tag", "******Error in parsing = " + e.getLocalizedMessage() + "******* " + e.getMessage());
         }
 
-        return new MovieModel("", "", "", "", "");
+        return new MovieModel("", "", "", "", "","","","","",false);
     }
 }

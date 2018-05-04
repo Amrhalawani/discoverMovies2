@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -20,12 +21,11 @@ public class DetailsActivity extends AppCompatActivity {
     public static String EXTRA_AVG = "avg";
     public static String EXTRA_DATE = "date";
     public static String EXTRA_OVERVIEW = "overview";
-
+    public static String pic_base_url = "http://image.tmdb.org/t/p/";
+    public static String pic_size_url = "w185";
     String title, poster, avg, date, overview;
-
-    int pos;
     TextView movieTitleTV, movieAvgTV, moviereleaseDateTV, movieOverviewTV;
-    ImageView posterIV,backgroundAlpha;
+    ImageView posterIV, backgroundAlpha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +34,47 @@ public class DetailsActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
 
         setupUi();
-        updateUI();
+        //  updateUI();
+        updateUI1();
 
 
     }
 
+    private void updateUI1() {
+        MovieModel movieModel = getIntent().getExtras().getParcelable("testparcelable");
+
+        //   MovieModel movieModel = new MovieModel("ahmed","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg ", "10/10/2010","5.9", "sadasda", "10", "156", "10", "1dasd", false);
+
+        title = movieModel.getTitle();
+
+        poster = movieModel.getPosterUrl();
+
+        avg = movieModel.getVoteAverage();
+
+        date = movieModel.getReleaseDate();
+
+        overview = movieModel.getSynopsis();
+
+        movieTitleTV.setText(title);
+        Picasso.get()
+                .load(poster)
+                .placeholder(R.drawable.user_placeholder)
+                .into(posterIV);
+
+        movieAvgTV.setText(avg);
+        moviereleaseDateTV.setText(date);
+        movieOverviewTV.setText(overview);
+
+        Picasso.get()
+                .load(poster)
+                .centerCrop()
+                .resize(120, 180)
+                .placeholder(R.drawable.user_placeholder)
+                .into(backgroundAlpha);
+    }
+
     private void setupUi() {
-        pos = getIntent().getExtras().getInt(EXTRA_POSITION);
+
         movieTitleTV = findViewById(R.id.title);
         movieAvgTV = findViewById(R.id.avarege);
         moviereleaseDateTV = findViewById(R.id.releasedate);
@@ -68,7 +102,7 @@ public class DetailsActivity extends AppCompatActivity {
         Picasso.get()
                 .load(poster)
                 .centerCrop()
-                .resize(120,180)
+                .resize(120, 180)
                 .placeholder(R.drawable.user_placeholder)
                 .into(backgroundAlpha);
     }
@@ -101,12 +135,12 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
 
-    public void testeventdetailActivtu(View view) {
-        String s = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7Q-E7qY6NWOnBg5DkhEwnkyQR2yIPc262CLQA2yrEfWt3U5Vl";
-        EventBus.getDefault().post(new MovieModel("ahmed", s, "13/13/2013", "5.7", "asdasdasd"));
-
-
-    }
+//    public void testeventdetailActivtu(View view) {
+//        String s = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7Q-E7qY6NWOnBg5DkhEwnkyQR2yIPc262CLQA2yrEfWt3U5Vl";
+//        EventBus.getDefault().post(new MovieModel("ahmed", s, "13/13/2013", "5.7", "asdasdasd,"));
+//
+//
+//    }
 
     @Override
     public void onBackPressed() {

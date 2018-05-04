@@ -49,7 +49,8 @@ public class RecyclerAdaptor extends RecyclerView.Adapter<RecyclerAdaptor.myView
         Log.e(TAG, "onBindViewHolder: ");
 //"http://i.imgur.com/DvpvklR.png"
         MovieModel movieModel = list.get(position);
-       // Picasso.get().setIndicatorsEnabled(true);
+
+        // Picasso.get().setIndicatorsEnabled(true);
         Picasso.get()
                 .load(movieModel.getPosterUrl())
                 .placeholder(R.drawable.user_placeholder)

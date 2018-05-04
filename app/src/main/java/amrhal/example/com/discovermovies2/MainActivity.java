@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -29,18 +29,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import javax.security.auth.login.LoginException;
-
 import amrhal.example.com.discovermovies2.Eventbustest.EventMassege;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onStart() {
+        EventBus.getDefault().register(this);
+        super.onStart();
+    }
 
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
     private static final String TAG = "TAG";
     RecyclerView recyclerView;
     List<MovieModel> list;
@@ -77,9 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         btnRetry.setVisibility(View.INVISIBLE);
                         progressBar.setVisibility(View.INVISIBLE);
                     }
-
                     return true;
-
                 case R.id.top_ratedID:
                     transaction.remove(favFragment).commit();
                     if (list.isEmpty()) {
@@ -94,13 +102,12 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.fev_movies:
-                     if (!favFragment.isAdded()) {
-                         transaction.add(R.id.container, favFragment).commit();
-                         return true;
-                     }
-                     else {
-                         Log.e(TAG, "onNavigationItemSelected: fragment already added");
-                     }
+                    if (!favFragment.isAdded()) {
+                        transaction.add(R.id.container, favFragment).commit();
+                        return true;
+                    } else {
+                        Log.e(TAG, "onNavigationItemSelected: fragment already added");
+                    }
 
             }
             return false;
@@ -114,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         frag = getFragmentManager();
         favFragment = new FavFragment();
-
 
         list = new ArrayList<>();
         connectTointernetTV = findViewById(R.id.emptyViewID);
@@ -134,23 +140,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     public void getPopularMovies() {
 
-        final Retrofit retrofit = new Retrofit.Builder().baseUrl(base_url).build();
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(base_url)
+                .build();
+
         MoviesInterface moviesInterface = retrofit.create(MoviesInterface.class);
         moviesInterface.getPopularMovies(api_key).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    if (response.body() != null) {
-                        final String JsonBody = response.body().string();
 
-                        recyclerAdaptor = new RecyclerAdaptor(MainActivity.this);
-                        recyclerView.setAdapter(recyclerAdaptor);
-                        recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-                        list = Util.parseJsonCTList(JsonBody);
+                if (response.body() != null) {
+                    recyclerAdaptor = new RecyclerAdaptor(MainActivity.this);
+                    recyclerView.setAdapter(recyclerAdaptor);
+                    recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+
+                    try {
+                        final String jsontResponse = response.body().string();
+
+                        list = Util.parseJsonCTList(jsontResponse);
                         recyclerAdaptor.updateData(list);
+                        
                         Log.e(TAG, "retrofit onResponse: list size = " + list.size());
                         connectTointernetTV.setVisibility(View.INVISIBLE);
                         btnRetry.setVisibility(View.INVISIBLE);
@@ -161,29 +172,25 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(int position) {
                                 //  Toast.makeText(MainActivity.this, "Clicked on Pos " + position, Toast.LENGTH_LONG).show();
-                                MovieModel movieModel = Util.parsejsonCTmovieObject(JsonBody, position);
+                                MovieModel movieModel = Util.parsejsonCTmovieObject(jsontResponse,position);
                                 Log.e(TAG, "main onItemClick: movieModel.getTitle()=" + movieModel.getTitle());
 
                                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                                 intent.putExtra(DetailsActivity.EXTRA_POSITION, position);
-                                intent.putExtra(DetailsActivity.EXTRA_TITLE, movieModel.getTitle());
-                                intent.putExtra(DetailsActivity.EXTRA_POSTER, movieModel.getPosterUrl());
-                                intent.putExtra(DetailsActivity.EXTRA_AVG, movieModel.getVoteAverage());
-                                intent.putExtra(DetailsActivity.EXTRA_DATE, movieModel.getReleaseDate());
-                                intent.putExtra(DetailsActivity.EXTRA_OVERVIEW, movieModel.getSynopsis());
+                                intent.putExtra("testparcelable", movieModel);
+
                                 startActivity(intent);
 
-                                //  EventBus.getDefault().post(movieModel);//Todo here eventBus didn't work due to lifecycle of detailactivity
+
+                                //  EventBus.getDefault().post(movieModel); here eventBus didn't work due to lifecycle of detailactivity
                                 // String s = "http://www.mechanicalboss.com/wp-content/uploads/2016/07/MECHANICAL_BOSS_Logo_2016_Def_SquareVer_A.jpg";
                                 // EventBus.getDefault().post(new MovieModel("The Show", s, "13/05/2013", "7.9", "بسم الله الرحمن الرحيم ، تيست تيست تيست تيست"));
                             }
                         });
 
-                    } else {
-                        Log.e(TAG, "Retrofit onResponse: response.body() = null");
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
 
@@ -191,15 +198,15 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
             }
-        });
 
+
+        });
     }
 
     public void getTopRatedMovies() {
-
-
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(base_url).build();
         MoviesInterface moviesInterface = retrofit.create(MoviesInterface.class);
+
         moviesInterface.getTopRatedMovies(api_key).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -212,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
                         recyclerAdaptor = new RecyclerAdaptor(MainActivity.this);
                         recyclerView.setAdapter(recyclerAdaptor);
                         recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+
                         list = Util.parseJsonCTList(JsonBody);
                         recyclerAdaptor.updateData(list);
                         btnRetry.setVisibility(View.INVISIBLE);
@@ -225,25 +233,21 @@ public class MainActivity extends AppCompatActivity {
                                 //   Toast.makeText(MainActivity.this, "Clicked on Pos " + position, Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                                 MovieModel movieModel = Util.parsejsonCTmovieObject(finalJsonBody, position);
-
+                                intent.putExtra("testparcelable", movieModel);
                                 intent.putExtra(DetailsActivity.EXTRA_POSITION, position);
-                                intent.putExtra(DetailsActivity.EXTRA_TITLE, movieModel.getTitle());
-                                intent.putExtra(DetailsActivity.EXTRA_POSTER, movieModel.getPosterUrl());
-                                intent.putExtra(DetailsActivity.EXTRA_AVG, movieModel.getVoteAverage());
-                                intent.putExtra(DetailsActivity.EXTRA_DATE, movieModel.getReleaseDate());
-                                intent.putExtra(DetailsActivity.EXTRA_OVERVIEW, movieModel.getSynopsis());
                                 startActivity(intent);
                             }
                         });
-
 
                     } else {
                         Log.e(TAG, "Retrofit onResponse: response.body() = null");
                     }
 
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
 
             }
 
@@ -251,43 +255,30 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
             }
+
         });
-
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void onEventMassege (EventMassege event){
 
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMassege(EventMassege event) {
-
-        final Snackbar mysnackbar = Snackbar.make(findViewById(R.id.container), event.message,
-                Snackbar.LENGTH_INDEFINITE);
-        mysnackbar.setAction("Retry", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mysnackbar.dismiss();
-                getPopularMovies();
-            }
-        })
-                .show();
-    }
+            final Snackbar mysnackbar = Snackbar.make(findViewById(R.id.container), event.message,
+                    Snackbar.LENGTH_INDEFINITE);
+            mysnackbar.setAction("Retry", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mysnackbar.dismiss();
+                    getPopularMovies();
+                }
+            })
+                    .show();
+        }
 
     public void testEventBus(View view) {
         EventBus.getDefault().post(new EventMassege("First, Check your Internet Connection and then click Retry"));
     }
-}
 
+    }
 //<integer-array name="deletedMovies">
 //<item>441614</item>
 //<item>337167</item>
@@ -325,3 +316,35 @@ public class MainActivity extends AppCompatActivity {
 //        iterator.remove();
 //        break;
 //}}}}
+
+//
+//
+//    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//        try {
+//            String JsonBody = "";
+//            if (response.body() != null) {
+//                JsonBody = response.body().string();
+//
+//                recyclerView = findViewById(R.id.recyclerviewID);
+//                recyclerAdaptor = new RecyclerAdaptor(MainActivity.this);
+//                recyclerView.setAdapter(recyclerAdaptor);
+//                recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+//
+//                list = Util.parseJsonCTList(JsonBody);
+//                recyclerAdaptor.updateData(list);
+//                btnRetry.setVisibility(View.INVISIBLE);
+//                progressBar.setVisibility(View.INVISIBLE);
+//                //MovieModel movieModel = list.get(0);
+//
+//                final String finalJsonBody = JsonBody;
+//                recyclerAdaptor.setOnItemClickListener(new RecyclerAdaptor.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(int position) {
+//                        //   Toast.makeText(MainActivity.this, "Clicked on Pos " + position, Toast.LENGTH_LONG).show();
+//                        Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+//                        MovieModel movieModel = Util.parsejsonCTmovieObject(finalJsonBody, position);
+//                        intent.putExtra("testparcelable", movieModel);
+//                        intent.putExtra(DetailsActivity.EXTRA_POSITION, position);
+//                        startActivity(intent);
+//                    }
+//                });
