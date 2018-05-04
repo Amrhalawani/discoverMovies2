@@ -1,56 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/details_activitybackg"
-    tools:context="amrhal.example.com.discovermovies.DetailsActivity">
-<android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@drawable/details_activitybackg"
+    tools:context="amrhal.example.com.discovermovies2.DetailsActivity">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/lemonada_semibold"
-            android:text="Overview"
 
-            android:textAllCaps="true"
-            android:textColor="@color/off"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/poster_detail" />
+    <ImageView
+        android:id="@+id/backgroundscrom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.06"
+        android:layout_gravity="center"
 
-        <ImageView
-            android:id="@+id/poster_detail"
-            android:layout_width="200dp"
-            android:layout_height="313dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/user_placeholder" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/poster_detail"
-            app:layout_constraintTop_toBottomOf="@+id/title">
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/lemonada_semibold"
+                android:text="Overview"
+
+                android:textAllCaps="true"
+                android:textColor="@color/off"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/poster_detail" />
+
+            <ImageView
+                android:id="@+id/poster_detail"
+                android:layout_width="200dp"
+                android:layout_height="313dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/user_placeholder" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/poster_detail"
+                app:layout_constraintTop_toBottomOf="@+id/title">
 
 
                 <TextView
@@ -71,61 +86,65 @@
                     android:textSize="30sp" />
 
 
-        </LinearLayout>
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/over_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/actor"
-            android:text="@string/lorem_ipsem"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            <TextView
+                android:id="@+id/over_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/actor"
+                android:text="@string/lorem_ipsem"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
 
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="100dp"
-            android:fontFamily="@font/alfa_slab_one"
-            android:gravity="center"
-            android:text="TITLE HERE"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/poster_detail"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="100dp"
+                android:fontFamily="@font/alfa_slab_one"
+                android:gravity="center"
+                android:text="TITLE HERE"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/poster_detail"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/releasedate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:fontFamily="@font/lemonada_semibold"
-            android:gravity="center"
-            android:text="2/2014"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/poster_detail"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            <TextView
+                android:id="@+id/releasedate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/lemonada_semibold"
+                android:gravity="center"
+                android:text="2/2014"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/poster_detail"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="testeventdetailActivtu"
-            android:text="test"
-            android:visibility="gone" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="testeventdetailActivtu"
+                android:text="test"
+                android:visibility="gone" />
 
-</android.support.constraint.ConstraintLayout>
-</ScrollView>
+        </android.support.constraint.ConstraintLayout>
+
+
+    </ScrollView>
+
+    </FrameLayout>

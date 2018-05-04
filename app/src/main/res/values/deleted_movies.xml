@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <integer-array name="deletedMovies">
+        <item>441614</item>
+        <item>337167</item>
+        <item>315837</item>
+        <item>339964</item>
+        <item>433310</item>
+        <item>431530</item>
+        <item>341013</item>
+        <item>339404</item>
+        <item>637</item>
+        <item>680</item>
+        <item>539</item>
+        <item>19404</item>
+        <item>55960</item>
+        <item>550</item>
+        <item>399055</item>
+        <item>401981</item>
+        <item>141052</item>
+        <item>353486</item>
+        <item>338970</item>
+    </integer-array>
+
+</resources>
