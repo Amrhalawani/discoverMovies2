@@ -9,16 +9,6 @@
     tools:context="amrhal.example.com.discovermovies2.DetailsActivity">
 
 
-    <ImageView
-        android:id="@+id/backgroundscrom"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.06"
-        android:layout_gravity="center"
-
-
-        />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -27,21 +17,6 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/lemonada_semibold"
-                android:text="Overview"
-
-                android:textAllCaps="true"
-                android:textColor="@color/off"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/poster_detail" />
 
             <ImageView
                 android:id="@+id/poster_detail"
@@ -94,13 +69,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/actor"
                 android:text="@string/lorem_ipsem"
                 android:textColor="@color/white"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toBottomOf="@+id/navigationDetailsID" />
 
             <TextView
                 android:id="@+id/title"
@@ -135,16 +111,39 @@
                 app:layout_constraintStart_toEndOf="@+id/poster_detail"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-            <Button
-                android:layout_width="wrap_content"
+            <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+                android:id="@+id/navigationDetailsID"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:onClick="testeventdetailActivtu"
-                android:text="test"
-                android:visibility="gone" />
+                android:layout_marginTop="8dp"
+                android:background="@color/colorPrimary"
+                app:itemIconTint="@drawable/navigation_color_states"
+                app:itemTextColor="@drawable/navigation_color_states"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/poster_detail"
+                app:menu="@menu/navigation_details" />
+
+            <fragment
+                android:id="@+id/details_mainfragment"
+                android:name="amrhal.example.com.discovermovies2.DetailsFragments.OverviewFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/over_view"
+                tools:layout="@layout/detailsfrag_overview" />
+
+            <ToggleButton
+                android:id="@+id/button_favorite"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_fav_selector"
+                android:checked="false"
+                android:text=""
+                android:textOff=""
+                android:textOn=""/>
 
         </android.support.constraint.ConstraintLayout>
 
 
     </ScrollView>
 
-    </FrameLayout>
+</FrameLayout>

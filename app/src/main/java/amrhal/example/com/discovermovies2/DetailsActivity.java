@@ -1,17 +1,27 @@
 package amrhal.example.com.discovermovies2;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.squareup.picasso.Picasso;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import amrhal.example.com.discovermovies2.DetailsFragments.OverviewFragment;
+import amrhal.example.com.discovermovies2.DetailsFragments.ReviewsFragment;
+import amrhal.example.com.discovermovies2.DetailsFragments.TrailersFragment;
+
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -27,12 +37,50 @@ public class DetailsActivity extends AppCompatActivity {
     TextView movieTitleTV, movieAvgTV, moviereleaseDateTV, movieOverviewTV;
     ImageView posterIV, backgroundAlpha;
 
+    FragmentManager frag;
+    FragmentTransaction transaction;
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            transaction = frag.beginTransaction();
+            switch (item.getItemId()) {
+
+                case R.id.overviewFragID:
+                    transaction.replace(R.id.details_mainfragment, new OverviewFragment()).commit();
+                    return true;
+                case R.id.reviewsFragID:
+                    transaction.replace(R.id.details_mainfragment, new ReviewsFragment()).commit();
+
+                    return true;
+                case R.id.TrailersFragID:
+                    transaction.replace(R.id.details_mainfragment, new TrailersFragment()).commit();
+                    return true;
+            }
+            return false;
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details_layout);
-        EventBus.getDefault().register(this);
 
+        frag = getFragmentManager();
+
+        BottomNavigationViewEx navigationEx =findViewById(R.id.navigationDetailsID);
+
+        navigationEx.enableAnimation(true);
+        navigationEx.enableShiftingMode(true);
+        navigationEx.enableItemShiftingMode(false);
+        navigationEx.setIconVisibility(false);
+        navigationEx.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+//        BottomNavigationView navigation = findViewById(R.id.navigationDetailsID);
+//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         setupUi();
         //  updateUI();
         updateUI1();
@@ -41,7 +89,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void updateUI1() {
-        MovieModel movieModel = getIntent().getExtras().getParcelable("testparcelable");
+        MovieModel movieModel = getIntent().getExtras().getParcelable("Movieobject");
 
         //   MovieModel movieModel = new MovieModel("ahmed","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg ", "10/10/2010","5.9", "sadasda", "10", "156", "10", "1dasd", false);
 
@@ -65,12 +113,12 @@ public class DetailsActivity extends AppCompatActivity {
         moviereleaseDateTV.setText(date);
         movieOverviewTV.setText(overview);
 
-        Picasso.get()
-                .load(poster)
-                .centerCrop()
-                .resize(120, 180)
-                .placeholder(R.drawable.user_placeholder)
-                .into(backgroundAlpha);
+//        Picasso.get()
+//                .load(poster)
+//                .centerCrop()
+//                .resize(120, 180)
+//                .placeholder(R.drawable.user_placeholder)
+//                .into(backgroundAlpha);
     }
 
     private void setupUi() {
@@ -80,67 +128,44 @@ public class DetailsActivity extends AppCompatActivity {
         moviereleaseDateTV = findViewById(R.id.releasedate);
         movieOverviewTV = findViewById(R.id.over_view);
         posterIV = findViewById(R.id.poster_detail);
-        backgroundAlpha = findViewById(R.id.backgroundscrom);
+
     }
 
-    private void updateUI() {
-        title = getIntent().getExtras().getString(EXTRA_TITLE);
-        poster = getIntent().getExtras().getString(EXTRA_POSTER);
-        avg = getIntent().getExtras().getString(EXTRA_AVG);
-        date = getIntent().getExtras().getString(EXTRA_DATE);
-        overview = getIntent().getExtras().getString(EXTRA_OVERVIEW);
-        movieTitleTV.setText(title);
-        Picasso.get()
-                .load(poster)
-                .placeholder(R.drawable.user_placeholder)
-                .into(posterIV);
-
-        movieAvgTV.setText(avg);
-        moviereleaseDateTV.setText(date);
-        movieOverviewTV.setText(overview);
-
-        Picasso.get()
-                .load(poster)
-                .centerCrop()
-                .resize(120, 180)
-                .placeholder(R.drawable.user_placeholder)
-                .into(backgroundAlpha);
-    }
+//    private void updateUI() {
+//        title = getIntent().getExtras().getString(EXTRA_TITLE);
+//        poster = getIntent().getExtras().getString(EXTRA_POSTER);
+//        avg = getIntent().getExtras().getString(EXTRA_AVG);
+//        date = getIntent().getExtras().getString(EXTRA_DATE);
+//        overview = getIntent().getExtras().getString(EXTRA_OVERVIEW);
+//        movieTitleTV.setText(title);
+//        Picasso.get()
+//                .load(poster)
+//                .placeholder(R.drawable.user_placeholder)
+//                .into(posterIV);
+//
+//        movieAvgTV.setText(avg);
+//        moviereleaseDateTV.setText(date);
+//        movieOverviewTV.setText(overview);
+//
+//        Picasso.get()
+//                .load(poster)
+//                .centerCrop()
+//                .resize(120, 180)
+//                .placeholder(R.drawable.user_placeholder)
+//                .into(backgroundAlpha);
+//    }
 
     @Override
     public void onStart() {
         super.onStart();
-        //EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStop() {
-        EventBus.getDefault().unregister(this);
+
         super.onStop();
     }
 
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMovieModel(MovieModel movieModel) {
-        Log.e("TAG", "onMovieModel eventbus: tragered");
-        movieTitleTV.setText(movieModel.getTitle());
-        movieAvgTV.setText(movieModel.getVoteAverage());
-        moviereleaseDateTV.setText(movieModel.getReleaseDate());
-        movieOverviewTV.setText(movieModel.getSynopsis());
-
-        Picasso.get()
-                .load(movieModel.getPosterUrl())
-                .placeholder(R.drawable.user_placeholder)
-                .into(posterIV);
-    }
-
-
-//    public void testeventdetailActivtu(View view) {
-//        String s = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7Q-E7qY6NWOnBg5DkhEwnkyQR2yIPc262CLQA2yrEfWt3U5Vl";
-//        EventBus.getDefault().post(new MovieModel("ahmed", s, "13/13/2013", "5.7", "asdasdasd,"));
-//
-//
-//    }
 
     @Override
     public void onBackPressed() {

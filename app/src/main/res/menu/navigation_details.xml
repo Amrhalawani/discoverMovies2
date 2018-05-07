@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/overviewFragID"
+        android:icon="@drawable/ic_trending_up_black_24dp"
+        android:title="@string/overview"
+        />
+
+    <item
+        android:id="@+id/TrailersFragID"
+        android:icon="@drawable/ic_trending_up_black_24dp"
+        android:title="@string/Trailers"
+
+        />
+    <item
+        android:id="@+id/reviewsFragID"
+        android:icon="@drawable/ic_trending_up_black_24dp"
+        android:title="@string/reviews"
+
+        />
+</menu>

@@ -37,7 +37,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
                         list = Util.parseJsonCTList(jsontResponse);
                         recyclerAdaptor.updateData(list);
-                        
+
                         Log.e(TAG, "retrofit onResponse: list size = " + list.size());
                         connectTointernetTV.setVisibility(View.INVISIBLE);
                         btnRetry.setVisibility(View.INVISIBLE);
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                                 intent.putExtra(DetailsActivity.EXTRA_POSITION, position);
-                                intent.putExtra("testparcelable", movieModel);
+                                intent.putExtra("Movieobject", movieModel);
 
                                 startActivity(intent);
 
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
                                 //   Toast.makeText(MainActivity.this, "Clicked on Pos " + position, Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
                                 MovieModel movieModel = Util.parsejsonCTmovieObject(finalJsonBody, position);
-                                intent.putExtra("testparcelable", movieModel);
+                                intent.putExtra("Movieobject", movieModel);
                                 intent.putExtra(DetailsActivity.EXTRA_POSITION, position);
                                 startActivity(intent);
                             }
