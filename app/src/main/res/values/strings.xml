@@ -102,4 +102,6 @@
     <string name="overview">Overview</string>
     <string name="Trailers">Trailers</string>
     <string name="reviews">reviews</string>
+    <string name="title_activity_details_perant">DetailsPerantActivity</string>
+    <string name="title_activity_pdetails">PDetailsActivity</string>
 </resources>

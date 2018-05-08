@@ -175,8 +175,7 @@ public class MainActivity extends AppCompatActivity {
                                 MovieModel movieModel = Util.parsejsonCTmovieObject(jsontResponse,position);
                                 Log.e(TAG, "main onItemClick: movieModel.getTitle()=" + movieModel.getTitle());
 
-                                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-                                intent.putExtra(DetailsActivity.EXTRA_POSITION, position);
+                                Intent intent = new Intent(MainActivity.this, PDetailsActivity.class);
                                 intent.putExtra("Movieobject", movieModel);
 
                                 startActivity(intent);
@@ -231,10 +230,9 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(int position) {
                                 //   Toast.makeText(MainActivity.this, "Clicked on Pos " + position, Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                                Intent intent = new Intent(MainActivity.this, PDetailsActivity.class);
                                 MovieModel movieModel = Util.parsejsonCTmovieObject(finalJsonBody, position);
                                 intent.putExtra("Movieobject", movieModel);
-                                intent.putExtra(DetailsActivity.EXTRA_POSITION, position);
                                 startActivity(intent);
                             }
                         });

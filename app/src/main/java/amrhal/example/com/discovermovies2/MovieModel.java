@@ -20,16 +20,16 @@ public class MovieModel implements Parcelable{
     @SerializedName("title")
     String title;
 
-    @SerializedName("name")
+    @SerializedName("poster_path")
     String poster_path;
 
-    @SerializedName("poster_path")
+    @SerializedName("releaseDate")
     String releaseDate;
 
     @SerializedName("voteAverage")
     String voteAverage;
 
-    @SerializedName("voteAverage")
+    @SerializedName("synopsis")
     String synopsis;
 
     @SerializedName("original_language")
