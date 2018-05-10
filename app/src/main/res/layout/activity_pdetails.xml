@@ -24,8 +24,9 @@
             app:toolbarId="@+id/toolbar">
 
             <ImageView
+                android:id="@+id/backImagecollapsedID"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="251dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/test"
                 app:layout_collapseMode="parallax" />
@@ -43,47 +44,35 @@
 
     <include layout="@layout/activity_content_details" />
 
-    <!--<android.support.design.widget.FloatingActionButton-->
-    <!--android:id="@+id/fab"-->
-    <!--android:layout_width="60dp"-->
-    <!--android:layout_height="60dp"-->
-    <!--android:layout_margin="5dp"-->
-    <!--android:checked="false"-->
-    <!--app:layout_anchor="@id/app_bar"-->
-    <!--app:layout_anchorGravity="bottom|end"-->
-    <!--app:src="@drawable/ic_fav_selector" />-->
-
-
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
-        android:src="@drawable/ic_fav_selector"
+        app:srcCompat="@drawable/ic_fav_unchecked"
         android:id="@+id/favButton"
         app:layout_anchor="@+id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        android:onClick="asdasd"
         app:pressedTranslationZ="12dp"
         app:rippleColor="#79e995" />
 
-    <ToggleButton
-        android:id="@+id/button_favorite"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:background="@drawable/ic_fav_selector"
-        android:checked="false"
-        android:text=""
-        android:textOff=""
-        android:textOn=""
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="center_horizontal|right" />
+    <!--<ToggleButton-->
+        <!--android:id="@+id/button_favorite"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:background="@drawable/ic_fav_selector"-->
+        <!--android:checked="false"-->
+        <!--android:text=""-->
+        <!--android:textOff=""-->
+        <!--android:textOn=""-->
+        <!--app:layout_anchor="@id/app_bar"-->
+        <!--app:layout_anchorGravity="center_horizontal|right" />-->
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="center_horizontal|right"
-        app:layout_scrollFlags="scroll|exitUntilCollapsed"
-        app:srcCompat="@drawable/ic_ellipse_1" />
+    <!--<ImageView-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--app:layout_anchor="@id/app_bar"-->
+        <!--app:layout_anchorGravity="center_horizontal|right"-->
+        <!--app:layout_scrollFlags="scroll|exitUntilCollapsed"-->
+        <!--app:srcCompat="@drawable/ic_ellipse_1" />-->
 
 </android.support.design.widget.CoordinatorLayout>

@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import amrhal.example.com.discovermovies2.Models.MovieModel;
+
 /**
  * Created by Amr hal on 3/03/2018.
  */

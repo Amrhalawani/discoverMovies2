@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -31,6 +32,8 @@ import java.util.List;
 
 import amrhal.example.com.discovermovies2.Eventbustest.EventMassege;
 
+import amrhal.example.com.discovermovies2.Models.MovieModel;
+import amrhal.example.com.discovermovies2.utils.Util;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -121,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         frag = getFragmentManager();
         favFragment = new FavFragment();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         list = new ArrayList<>();
         connectTointernetTV = findViewById(R.id.emptyViewID);
@@ -300,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
 //</integer-array>
 ////this method in MainActivity to modify movieList and delete
 ////movies before populating UI
+
 //private void modifyMovieList(List<MovieModel> list){
 //        int[] deletedMoviesID= getResources().getIntArray(R.array.deletedMovies);
 //        ModifyMovieList.modifyList(list,deletedMoviesID);

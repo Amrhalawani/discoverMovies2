@@ -6,11 +6,10 @@
     tools:context="amrhal.example.com.discovermovies2.DetailsFragments.ReviewsFragment"
     android:id="@+id/frame_layout_reviewsfragment">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:background="#41a65e"
-        android:text="reviews"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerviewRecviewID"/>
+
 
 </FrameLayout>

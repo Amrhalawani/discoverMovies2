@@ -1,11 +1,9 @@
-package amrhal.example.com.discovermovies2;
+package amrhal.example.com.discovermovies2.Models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
 
 /**
  * Created by Amr hal on 3/03/2018.
