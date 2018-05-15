@@ -10,13 +10,23 @@ import android.os.Parcelable;
 public class VideoModel implements Parcelable {
     String name; //video name
     String key;
-    String youtubethubnial;
 
+    public String getmName() {
+        return name;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public VideoModel(String name, String key) {
+        this.name = name;
+        this.key = key;
+    }
 
     protected VideoModel(Parcel in) {
         name = in.readString();
         key = in.readString();
-        youtubethubnial = in.readString();
     }
 
     public static final Creator<VideoModel> CREATOR = new Creator<VideoModel>() {
@@ -40,6 +50,5 @@ public class VideoModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(key);
-        dest.writeString(youtubethubnial);
     }
 }

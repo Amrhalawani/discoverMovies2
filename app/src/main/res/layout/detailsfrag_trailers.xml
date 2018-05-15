@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame_layout_trailersfragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="amrhal.example.com.discovermovies2.DetailsFragments.TrailersFragment"
-    android:id="@+id/frame_layout_trailersfragment">
+    android:background="@drawable/fragment_background"
+    tools:context="amrhal.example.com.discovermovies2.DetailsFragments.TrailersFragment">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:gravity="center"
-        android:background="#cc64ad"
-        android:text="trailers"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerviewVideosID"/>
 
 </FrameLayout>

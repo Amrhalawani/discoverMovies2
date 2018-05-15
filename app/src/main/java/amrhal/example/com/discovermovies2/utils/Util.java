@@ -11,6 +11,7 @@ import java.util.List;
 
 import amrhal.example.com.discovermovies2.Models.MovieModel;
 import amrhal.example.com.discovermovies2.Models.ReviewModel;
+import amrhal.example.com.discovermovies2.Models.VideoModel;
 
 /**
  * Created by Amr hal on 03/03/2018.
@@ -22,6 +23,7 @@ public class Util {
     public static String pic_base_url = "http://image.tmdb.org/t/p/";
     public static String pic_size_urlW185 = "w185";
     public static String pic_size_urlW342 = "w342";
+    public static String pic_size_urlW500 = "w500";
 
     static String posterPathUrl;
     static String posterBackUrl;
@@ -79,7 +81,7 @@ public class Util {
             boolean adult = jsonObject.getBoolean("adult");
 
             posterPathUrl = pic_base_url + pic_size_urlW185 + posterPath;
-            posterBackUrl = pic_base_url + pic_size_urlW342 + posterback;
+            posterBackUrl = pic_base_url + pic_size_urlW500 + posterback;
 
             Log.e("TAG", "parsejsonCTmovieObject: " + movieName + "." + movieReleasDate + "." + movieAvg + "." + movieOverview);
             MovieModel movieModel = new MovieModel(movieName, posterPathUrl, movieReleasDate, movieAvg, movieOverview, original_language, original_title, id, posterBackUrl, adult);
@@ -94,8 +96,9 @@ public class Util {
         return new MovieModel("", "", "", "", "", "", "", "", "", false);
     }
 
-    public static List<MovieModel> parseJsonMovieVideo(String json) {
-        List<MovieModel> listOfMovies = new ArrayList<>();
+    public static List<VideoModel> parseJsonMovieVideo(String json) {
+
+        List<VideoModel> listOfMovies = new ArrayList<>();
         try {
             JSONObject jsonobj = new JSONObject(json);
 
@@ -105,19 +108,16 @@ public class Util {
 
                 JSONObject jsonObject = (JSONObject) resultJsonArray.get(i);
 
-                String movieName = jsonObject.getString(movieTitle);
-                String posterPath = jsonObject.getString("poster_path");
-                posterPathUrl = pic_base_url + pic_size_urlW185 + posterPath;
-                MovieModel movieModel = new MovieModel(movieName, posterPathUrl);
-                listOfMovies.add(movieModel);
-
+                String movieName = jsonObject.getString("name");
+                String youtubeKey = jsonObject.getString("key");
+                VideoModel videoModel = new VideoModel(movieName,youtubeKey);
+                listOfMovies.add(videoModel);
             }
-            Log.e("tag", "util.class list.size=" + listOfMovies.size());
             return listOfMovies;
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e("tag", "******Error in parsing = " + e.getLocalizedMessage() + "******* " + e.getMessage());
+            Log.e("tag", "******Error in parsing parseJsonMovieVideo= " + e.getLocalizedMessage() + "******* " + e.getMessage());
         }
 
         return null;
@@ -137,7 +137,7 @@ public class Util {
 
                 String AutherName = jsonObject.getString("author");
                 String content = jsonObject.getString("content");
-                ReviewModel reviewModel = new ReviewModel(AutherName,content);
+                ReviewModel reviewModel = new ReviewModel(AutherName, content);
 
                 listOfreviews.add(reviewModel);
 
@@ -153,4 +153,34 @@ public class Util {
         return null;
 
     }
+
+
+
+//    public static String parseJsonYoutubekey(String json) {
+//
+//        try {
+//            JSONObject jsonobj = new JSONObject(json);
+//
+//            JSONArray resultJsonArray = jsonobj.getJSONArray(Results_jsonArray);
+//
+//            for (int i = 0; i < resultJsonArray.length(); i++) {
+//
+//                JSONObject jsonObject = (JSONObject) resultJsonArray.get(i);
+//
+//                String movieName = jsonObject.getString("name");
+//                String youtubeKey = jsonObject.getString("key");
+//
+//            }
+//            return "";
+//
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//            Log.e("tag", "******Error in parsing parseJsonMovieVideo= " + e.getLocalizedMessage() + "******* " + e.getMessage());
+//        }
+//
+//        return null;
+//
+//    }
+
+
 }

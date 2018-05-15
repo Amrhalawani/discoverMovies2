@@ -26,7 +26,7 @@
             <ImageView
                 android:id="@+id/backImagecollapsedID"
                 android:layout_width="match_parent"
-                android:layout_height="251dp"
+                android:layout_height="400dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/test"
                 app:layout_collapseMode="parallax" />
@@ -45,34 +45,34 @@
     <include layout="@layout/activity_content_details" />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/favButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
-        app:srcCompat="@drawable/ic_fav_unchecked"
-        android:id="@+id/favButton"
         app:layout_anchor="@+id/app_bar"
         app:layout_anchorGravity="bottom|end"
         app:pressedTranslationZ="12dp"
-        app:rippleColor="#79e995" />
+        app:rippleColor="#79e995"
+        app:srcCompat="@drawable/ic_fav_unchecked" />
 
     <!--<ToggleButton-->
-        <!--android:id="@+id/button_favorite"-->
-        <!--android:layout_width="50dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:background="@drawable/ic_fav_selector"-->
-        <!--android:checked="false"-->
-        <!--android:text=""-->
-        <!--android:textOff=""-->
-        <!--android:textOn=""-->
-        <!--app:layout_anchor="@id/app_bar"-->
-        <!--app:layout_anchorGravity="center_horizontal|right" />-->
+    <!--android:id="@+id/button_favorite"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:background="@drawable/ic_fav_selector"-->
+    <!--android:checked="false"-->
+    <!--android:text=""-->
+    <!--android:textOff=""-->
+    <!--android:textOn=""-->
+    <!--app:layout_anchor="@id/app_bar"-->
+    <!--app:layout_anchorGravity="center_horizontal|right" />-->
 
     <!--<ImageView-->
-        <!--android:layout_width="50dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--app:layout_anchor="@id/app_bar"-->
-        <!--app:layout_anchorGravity="center_horizontal|right"-->
-        <!--app:layout_scrollFlags="scroll|exitUntilCollapsed"-->
-        <!--app:srcCompat="@drawable/ic_ellipse_1" />-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--app:layout_anchor="@id/app_bar"-->
+    <!--app:layout_anchorGravity="center_horizontal|right"-->
+    <!--app:layout_scrollFlags="scroll|exitUntilCollapsed"-->
+    <!--app:srcCompat="@drawable/ic_ellipse_1" />-->
 
 </android.support.design.widget.CoordinatorLayout>

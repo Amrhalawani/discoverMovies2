@@ -20,15 +20,11 @@ import android.widget.Toast;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import amrhal.example.com.discovermovies2.DetailsFragments.OverviewFragment;
 import amrhal.example.com.discovermovies2.DetailsFragments.ReviewsFragment;
 import amrhal.example.com.discovermovies2.DetailsFragments.TrailersFragment;
 import amrhal.example.com.discovermovies2.Models.MovieModel;
-import amrhal.example.com.discovermovies2.Models.ReviewModel;
+
 
 public class PDetailsActivity extends AppCompatActivity {
     public static String pic_base_url = "http://image.tmdb.org/t/p/";
@@ -113,8 +109,9 @@ public class PDetailsActivity extends AppCompatActivity {
         setupUi();
         updateUI1();
         floatingbuttonhandleClicks();
-        // toOverviewFragment();  // i think this is not the best practice "the fragment called twice 1st from xml and 2nd here, and in the first one getargumant == null
+
         navigationEx.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        // toOverviewFragment();  // i think this is not the best practice "the fragment called twice 1st from xml and 2nd here, and in the first one getargumant == null
         navigationEx.setCurrentItem(0); //R.id.overviewFragID didn't work
     }
 
@@ -122,12 +119,17 @@ public class PDetailsActivity extends AppCompatActivity {
     private void toOverviewFragment() {
         overviewFragment = new OverviewFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("message", Synopsis);
+        bundle.putString("Synopsis", Synopsis);
+        bundle.putString("original_title", original_title);
+        bundle.putString("original_lang", original_lang);
         overviewFragment.setArguments(bundle);
     }
 
     private void toTrailersFragment() {
         trailersFragment = new TrailersFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("id", id);
+        trailersFragment.setArguments(bundle);
     }
 
     private void toReviewsFragment() {
@@ -150,10 +152,12 @@ public class PDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (flag) {
                     fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_fav_checked));
+                    Toast.makeText(PDetailsActivity.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
                     flag = false;
 
                 } else if (!flag) {
                     fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_fav_unchecked));
+                    Toast.makeText(PDetailsActivity.this, "Removed from Favourites", Toast.LENGTH_SHORT).show();
                     flag = true;
                 }
             }

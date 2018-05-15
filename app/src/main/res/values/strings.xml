@@ -104,4 +104,7 @@
     <string name="reviews">reviews</string>
     <string name="title_activity_details_perant">DetailsPerantActivity</string>
     <string name="title_activity_pdetails">PDetailsActivity</string>
+    <string name="synopsis">Synopsis :</string>
+    <string name="original_langueage">Original Title :</string>
+    <string name="lorem_ipsem_title_en">lorem ipsem title (EN)</string>
 </resources>

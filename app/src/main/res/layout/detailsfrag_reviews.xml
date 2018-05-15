@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fragment_background"
     tools:context="amrhal.example.com.discovermovies2.DetailsFragments.ReviewsFragment"
     android:id="@+id/frame_layout_reviewsfragment">
 
@@ -10,6 +11,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recyclerviewRecviewID"/>
-
 
 </FrameLayout>
