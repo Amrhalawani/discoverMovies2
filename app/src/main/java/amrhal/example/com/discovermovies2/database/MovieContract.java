@@ -47,6 +47,9 @@ public final class MovieContract {
 
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, FAVMOVIES);
 
+        //0 da mish ha3mel beh 7aga just had7ól beh case 2 fe provider
+        public static final Uri CONTENT_URiUnknown_id = Uri.withAppendedPath(BASE_CONTENT_URI,"favmovies/0");
+
     }
 
 }

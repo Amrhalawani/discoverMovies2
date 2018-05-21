@@ -157,7 +157,6 @@ public class PDetailsActivity extends AppCompatActivity {
                 if (flag) {
                     fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_fav_checked));
                     Toast.makeText(PDetailsActivity.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
-
                     insertFavmovie();
                     flag = false;
 
@@ -172,14 +171,14 @@ public class PDetailsActivity extends AppCompatActivity {
     }
 
     private void DeleteFavMovie() {
+        String[] selectionArgs = {String.valueOf(id)};
+//CONTENT_URiUnknown_id bed7'ól beh case 2 fe provider mish akter
+        int rowDeleted = getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URiUnknown_id, null, selectionArgs);
 
-//todo still not finished
-        int rowDeleted = getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
-
-        Log.v("TAG", rowDeleted + " row deleted from pet database");
+        Log.e("TAG", " row deleted from pet database=" + rowDeleted + " selection args=" + selectionArgs[0]);
     }
 
-    void insertFavmovie() {
+    private void insertFavmovie() {
         ContentValues values = new ContentValues(); //key value
 
         values.put(MovieContract.MovieEntry.COLUMN_TITLE, title);
