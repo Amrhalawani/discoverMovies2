@@ -2,6 +2,8 @@ package amrhal.example.com.discovermovies2;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -11,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,6 +27,7 @@ import amrhal.example.com.discovermovies2.DetailsFragments.OverviewFragment;
 import amrhal.example.com.discovermovies2.DetailsFragments.ReviewsFragment;
 import amrhal.example.com.discovermovies2.DetailsFragments.TrailersFragment;
 import amrhal.example.com.discovermovies2.Models.MovieModel;
+import amrhal.example.com.discovermovies2.database.MovieContract;
 
 
 public class PDetailsActivity extends AppCompatActivity {
@@ -89,7 +93,7 @@ public class PDetailsActivity extends AppCompatActivity {
 
 
         //todo fe error elly howa already commit da cuz transaction = frag.beginTransaction() called
-        //todo el textview bta3 1st frag haeshta3'al lama tdos
+
         frag = getFragmentManager();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -153,15 +157,52 @@ public class PDetailsActivity extends AppCompatActivity {
                 if (flag) {
                     fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_fav_checked));
                     Toast.makeText(PDetailsActivity.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
+
+                    insertFavmovie();
                     flag = false;
 
                 } else if (!flag) {
                     fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_fav_unchecked));
+                    DeleteFavMovie();
                     Toast.makeText(PDetailsActivity.this, "Removed from Favourites", Toast.LENGTH_SHORT).show();
                     flag = true;
                 }
             }
         });
+    }
+
+    private void DeleteFavMovie() {
+
+//todo still not finished
+        int rowDeleted = getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);
+
+        Log.v("TAG", rowDeleted + " row deleted from pet database");
+    }
+
+    void insertFavmovie() {
+        ContentValues values = new ContentValues(); //key value
+
+        values.put(MovieContract.MovieEntry.COLUMN_TITLE, title);
+        values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, poster);
+        values.put(MovieContract.MovieEntry.COLUMN_RELEASEDATE, date);
+        values.put(MovieContract.MovieEntry.COLUMN_VOTEAVERAGE, avg);
+        values.put(MovieContract.MovieEntry.COLUMN_SYNOPSIS, Synopsis);
+        values.put(MovieContract.MovieEntry.COLUMN_ORIGINAL_LANGUAGE, original_lang);
+        values.put(MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE, original_title);
+        values.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, id);
+        values.put(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH, backdrop_path);
+
+
+        String posterpathfullUrl = "http://image.tmdb.org/t/p/w154" + "/y31QB9kn3XSudA15tV7UWQ9XLuW.jpg";
+
+        // values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, posterpathfullUrl);
+
+        Uri newUri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, values);
+
+        Log.e("TAG", "insert movie: and newrowid is= " + newUri);
+
+        //todo error here
+
     }
 
 
@@ -214,7 +255,7 @@ public class PDetailsActivity extends AppCompatActivity {
 
         movieAvgTV.setText(avg);
         moviereleaseDateTV.setText(date);
-        //  movieOverviewTV.setText(overview);
+        //  movieOverviewTV.setText(synopsis);
         getSupportActionBar().setTitle(title);
 
     }
@@ -239,7 +280,6 @@ public class PDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            Toast.makeText(PDetailsActivity.this, "android.R.id.home", Toast.LENGTH_SHORT).show();
             finish();
         }
         return super.onOptionsItemSelected(item);

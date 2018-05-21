@@ -1,16 +1,71 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="amrhal.example.com.discovermovies2.FavFragment"
-    android:id="@+id/frame_layout">
+    android:background="@drawable/user_placeholder"
+    tools:context="amrhal.example.com.discovermovies2.FavFragment">
+
+
+    <Button
+        android:id="@+id/btn_fakedateID"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="insert fake data"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_deleteAlldataID"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginEnd="8dp"
+        android:text="delete all"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!--<ListView-->
+    <!--android:id="@+id/list"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
+
 
     <TextView
+        android:id="@+id/empty_title_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/fragment_background"
+        android:fontFamily="sans-serif-medium"
         android:gravity="center"
-        android:alpha="0.2"
-        android:text="@string/hello_blank_fragment"
-        android:background="#ff8d8d"/>
+        android:text="@string/emptyview"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="#ffffff"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <GridView
+        android:id="@+id/Gridlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:clipToPadding="false"
+        android:columnWidth="180dp"
+        android:numColumns="2"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
