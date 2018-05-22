@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import amrhal.example.com.discovermovies2.database.MovieContract;
 import amrhal.example.com.discovermovies2.database.MovieContract.MovieEntry;
 
 public class FavDetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -23,7 +24,7 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
     ImageView posterIV;
 
     Uri mCurrentUri;
-
+    String movie_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,9 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
         setContentView(R.layout.activity_fav_details);
         setupUi();
         mCurrentUri = getIntent().getData();
-        Log.e("TAG", "FavDetailsActivity onCreate: url is" + mCurrentUri.toString());
+        movie_id = getIntent().getExtras().getString("id");
+
+      //  Log.e("TAG", "FavDetailsActivity onCreate: url is" + mCurrentUri.toString());
 
         //update ui when onLoadFinished method excuet
         //todo error heeeeeeeeeeeeeere in loader at pdetails pdetail :192 **********************************
@@ -69,15 +72,19 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
                 MovieEntry.COLUMN_VOTEAVERAGE,
                 MovieEntry.COLUMN_SYNOPSIS,
                 MovieEntry.COLUMN_ORIGINAL_LANGUAGE,
-                MovieEntry.COLUMN_ORIGINAL_TITLE,
+                MovieEntry.COLUMN_ORIGINAL_TITLE
         };
+
+        String selection = MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=?";
+
+        String[] selectionArgs = new String[]{movie_id};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
-                mCurrentUri,   // Provider content URI to query
+                MovieEntry.CONTENT_URiUnknown_id,   // Provider content URI to query
                 projection,             // Columns to include in the resulting Cursor
-                null,                   // No selection clause
-                null,                   // No selection arguments
+                selection,                   //  selection clause
+                selectionArgs,                   // No selection arguments
                 null);// Default sort order
 
     }
@@ -106,7 +113,7 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
             posterUrl = cursor.getString(posterUrlColumnIndex);
 
             String a = title + "/" + releaseDate + "/" + avg + "/" + originalLang + "/" + synopsis + "/" + posterUrl;
-            Log.e("TAG" , "onLoadFinished: a= "+a);
+            Log.e("TAG", "onLoadFinished: a= " + a);
             //set data
             movieTitleTV.setText(title);
             moviereleaseDateTV.setText(releaseDate);
@@ -125,7 +132,7 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         //clear out all fields
-        Log.e("TAG" , "fav details onLoadreset");
+        Log.e("TAG", "fav details onLoadreset");
         movieTitleTV.setText("");
         moviereleaseDateTV.setText("");
         movieAvgTV.setText("");

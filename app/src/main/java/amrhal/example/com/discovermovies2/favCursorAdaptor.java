@@ -50,4 +50,6 @@ public class favCursorAdaptor extends CursorAdapter {
         nameTextView.setText(movieName);
     }
 
+
+
 }

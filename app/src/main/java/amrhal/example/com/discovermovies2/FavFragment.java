@@ -27,9 +27,10 @@ import amrhal.example.com.discovermovies2.database.MovieContract.MovieEntry;
 
 
 public class FavFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
-    Cursor cursor;
+    Cursor cursor =null;
     SQLiteDatabase db;
     favCursorAdaptor favCursorAdaptor;
+    String movie_id;
 
     public FavFragment() {
         // Required empty public constructor
@@ -72,10 +73,14 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(getActivity(), FavDetailsActivity.class);
+                cursor.moveToPosition(position);
+                int index = cursor.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID);
+                movie_id = cursor.getString(index);
+                cursor.close();  //todo
+                //Uri currentPetUri = ContentUris.withAppendedId(MovieEntry.CONTENT_URI, position + 1); //+1 duo to this position index started from 0 and table started from 1
+                intent.putExtra("id", movie_id);
 
-                Uri currentPetUri = ContentUris.withAppendedId(MovieEntry.CONTENT_URI, position + 1); //+1 duo to this position started from 0 and table started from 1
-
-                intent.setData(currentPetUri);
+                //intent.setData(currentPetUri);
 
                 startActivity(intent);
 
@@ -84,7 +89,6 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
 
         return inflatedview;
     }
-
 
 
     @Override
@@ -132,9 +136,8 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
         //this didn't delete auto increment column so the solution is
         // https://stackoverflow.com/questions/1601697/sqlite-reset-primary-key-field
         int rowsDeleted = getActivity().getApplicationContext().getContentResolver().delete(MovieEntry.CONTENT_URI, null, null);
-
+        //to empty the table (delete all records) and reset auto increment count.
         db.execSQL("delete from sqlite_sequence where name = 'favmovies'");
-
         Log.v("TAG", rowsDeleted + " rows deleted from pet database");
     }
 
@@ -145,7 +148,8 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
         String[] projection = {
                 MovieEntry._ID,
                 MovieEntry.COLUMN_TITLE,
-                MovieEntry.COLUMN_POSTER_PATH};
+                MovieEntry.COLUMN_POSTER_PATH,
+                MovieEntry.COLUMN_MOVIE_ID};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(getActivity(),   // Parent activity context
@@ -158,12 +162,23 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor1) {
+        cursor = cursor1;
+
         favCursorAdaptor.swapCursor(cursor1);
+
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         favCursorAdaptor.swapCursor(null);
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        cursor.close();
+        db.close();
+        Toast.makeText(getActivity(), "favfragment onstop",Toast.LENGTH_SHORT).show();
     }
 }

@@ -3,6 +3,7 @@ package amrhal.example.com.discovermovies2;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -27,7 +28,7 @@ import amrhal.example.com.discovermovies2.DetailsFragments.OverviewFragment;
 import amrhal.example.com.discovermovies2.DetailsFragments.ReviewsFragment;
 import amrhal.example.com.discovermovies2.DetailsFragments.TrailersFragment;
 import amrhal.example.com.discovermovies2.Models.MovieModel;
-import amrhal.example.com.discovermovies2.database.MovieContract;
+import amrhal.example.com.discovermovies2.database.MovieContract.MovieEntry;
 
 
 public class PDetailsActivity extends AppCompatActivity {
@@ -117,6 +118,7 @@ public class PDetailsActivity extends AppCompatActivity {
         navigationEx.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         // toOverviewFragment();  // i think this is not the best practice "the fragment called twice 1st from xml and 2nd here, and in the first one getargumant == null
         navigationEx.setCurrentItem(0); //R.id.overviewFragID didn't work
+       flag =  favstatus();
     }
 
 
@@ -145,15 +147,14 @@ public class PDetailsActivity extends AppCompatActivity {
 
 
     private void floatingbuttonhandleClicks() {
-
         //this method for handle ckick only not check status before i clicked , so you have to #todo make another method to retreve the status before you click
-        flag = true; // true if first icon is visible, false if second one is visible.
-
+        // true if first icon is visible, false if second one is visible.
         fab = findViewById(R.id.favButton);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (flag) {
                     fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_fav_checked));
                     Toast.makeText(PDetailsActivity.this, "Added to Favourites", Toast.LENGTH_SHORT).show();
@@ -170,10 +171,29 @@ public class PDetailsActivity extends AppCompatActivity {
         });
     }
 
+    boolean favstatus() {
+        //   int rowDeleted = getContentResolver().q(MovieContract.MovieEntry.CONTENT_URiUnknown_id, null, selectionArgs);
+        String[] selectionArgs = {String.valueOf(id)};
+
+        String[] projection = {
+                MovieEntry.COLUMN_MOVIE_ID};
+        //CONTENT_URiUnknown_id bed7'ól beh case 2 fe provider mish akter
+
+        Cursor cursor = getContentResolver().query(MovieEntry.CONTENT_URiUnknown_id, projection, null, selectionArgs, null);
+        int cursurcount = cursor.getCount();
+        if ( cursor.getCount()!=0 && cursor.getCount()!=-1 ) {
+cursor.close(); //todo
+            fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_fav_checked));
+            return false;
+        }
+        cursor.close(); //todo
+        return true;
+    }
+
     private void DeleteFavMovie() {
         String[] selectionArgs = {String.valueOf(id)};
-//CONTENT_URiUnknown_id bed7'ól beh case 2 fe provider mish akter
-        int rowDeleted = getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URiUnknown_id, null, selectionArgs);
+        //CONTENT_URiUnknown_id bed7'ól beh case 2 fe provider mish akter
+        int rowDeleted = getContentResolver().delete(MovieEntry.CONTENT_URiUnknown_id, null, selectionArgs);
 
         Log.e("TAG", " row deleted from pet database=" + rowDeleted + " selection args=" + selectionArgs[0]);
     }
@@ -181,27 +201,24 @@ public class PDetailsActivity extends AppCompatActivity {
     private void insertFavmovie() {
         ContentValues values = new ContentValues(); //key value
 
-        values.put(MovieContract.MovieEntry.COLUMN_TITLE, title);
-        values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, poster);
-        values.put(MovieContract.MovieEntry.COLUMN_RELEASEDATE, date);
-        values.put(MovieContract.MovieEntry.COLUMN_VOTEAVERAGE, avg);
-        values.put(MovieContract.MovieEntry.COLUMN_SYNOPSIS, Synopsis);
-        values.put(MovieContract.MovieEntry.COLUMN_ORIGINAL_LANGUAGE, original_lang);
-        values.put(MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE, original_title);
-        values.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, id);
-        values.put(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH, backdrop_path);
+        values.put(MovieEntry.COLUMN_TITLE, title);
+        values.put(MovieEntry.COLUMN_POSTER_PATH, poster);
+        values.put(MovieEntry.COLUMN_RELEASEDATE, date);
+        values.put(MovieEntry.COLUMN_VOTEAVERAGE, avg);
+        values.put(MovieEntry.COLUMN_SYNOPSIS, Synopsis);
+        values.put(MovieEntry.COLUMN_ORIGINAL_LANGUAGE, original_lang);
+        values.put(MovieEntry.COLUMN_ORIGINAL_TITLE, original_title);
+        values.put(MovieEntry.COLUMN_MOVIE_ID, id);
+        values.put(MovieEntry.COLUMN_BACKDROP_PATH, backdrop_path);
 
 
         String posterpathfullUrl = "http://image.tmdb.org/t/p/w154" + "/y31QB9kn3XSudA15tV7UWQ9XLuW.jpg";
 
         // values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, posterpathfullUrl);
 
-        Uri newUri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, values);
+        Uri newUri = getContentResolver().insert(MovieEntry.CONTENT_URI, values);
 
         Log.e("TAG", "insert movie: and newrowid is= " + newUri);
-
-        //todo error here
-
     }
 
 

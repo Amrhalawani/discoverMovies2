@@ -63,11 +63,31 @@ public class MovieProvider extends ContentProvider {
 //-------------------
 
             case 2:
+// to know favorite btn status
+                if (projection[0] == MovieContract.MovieEntry.COLUMN_MOVIE_ID) {
+
+                    Log.e("TAG", "content provider case 2 query: projection[0] == MovieContract.MovieEntry.COLUMN_MOVIE_ID");
+                    selection = MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=?";
+
+                    cursor = db.query(
+                            MovieContract.MovieEntry.TABLE_NAME,   // The table to query
+                            projection,            // The columns to return
+                            selection,                  // The columns for the WHERE clause
+                            selectionArgs,                  // The values for the WHERE clause
+                            null,                  // Don't group the rows
+                            null,                  // Don't filter by row groups
+                            null);
+                 break;
+
+                }
+
                 Log.e(LOG_TAG, "query: case 2");
-                selection = MovieContract.MovieEntry._ID + "=?";
+//                selection = MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=?";
                 //get id from uri
-                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                Log.e("TAG", "selection is"+selection+ " selectionArgs="+selectionArgs[0]);
+                //selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+               // selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+
+               Log.e("TAG", "selection is" + selection + " selectionArgs=" + selectionArgs[0]);
 
                 cursor = db.query(
                         MovieContract.MovieEntry.TABLE_NAME,   // The table to query
@@ -139,7 +159,7 @@ public class MovieProvider extends ContentProvider {
                 break;
             case 2:
                 selection = MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=?";
-              //  selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                //  selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 rowsDeleted = database.delete(MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
@@ -149,7 +169,7 @@ public class MovieProvider extends ContentProvider {
         if (rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
-
+        getContext().getContentResolver().notifyChange(uri, null);
         return rowsDeleted;
     }
 
