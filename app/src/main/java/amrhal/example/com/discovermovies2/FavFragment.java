@@ -27,7 +27,8 @@ import amrhal.example.com.discovermovies2.database.MovieContract.MovieEntry;
 
 
 public class FavFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
-    Cursor cursor =null;
+    Cursor cursor ;
+
     SQLiteDatabase db;
     favCursorAdaptor favCursorAdaptor;
     String movie_id;
@@ -50,7 +51,6 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
         MovieDbHelper mDbHelper = new MovieDbHelper(getActivity());
         db = mDbHelper.getReadableDatabase();
 
-
         //  displayDatabaseInfo();
 
         // ListView listView = inflatedview.findViewById(R.id.list);
@@ -65,6 +65,7 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
         View emptyView = inflatedview.findViewById(R.id.empty_title_text);
         // listView.setEmptyView(emptyView);
         gridView.setEmptyView(emptyView);
+
         // Kick off the loader
         getLoaderManager().initLoader(0, null, this);
 
@@ -76,12 +77,11 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
                 cursor.moveToPosition(position);
                 int index = cursor.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID);
                 movie_id = cursor.getString(index);
-                cursor.close();  //todo
+
                 //Uri currentPetUri = ContentUris.withAppendedId(MovieEntry.CONTENT_URI, position + 1); //+1 duo to this position index started from 0 and table started from 1
                 intent.putExtra("id", movie_id);
 
                 //intent.setData(currentPetUri);
-
                 startActivity(intent);
 
             }
@@ -89,6 +89,13 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
 
         return inflatedview;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Toast.makeText(getActivity(), "favfragment onStart", Toast.LENGTH_SHORT).show();
+    }
+
 
 
     @Override
@@ -121,7 +128,6 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
 
     private void insertFakeMovie() {
         ContentValues values = new ContentValues(); //key value
-
         values.put(MovieEntry.COLUMN_TITLE, "movie");
 
         String posterpathfullUrl = "http://image.tmdb.org/t/p/w154" + "/y31QB9kn3XSudA15tV7UWQ9XLuW.jpg";
@@ -163,22 +169,20 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor1) {
         cursor = cursor1;
-
         favCursorAdaptor.swapCursor(cursor1);
+
+
 
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         favCursorAdaptor.swapCursor(null);
-
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        cursor.close();
-        db.close();
-        Toast.makeText(getActivity(), "favfragment onstop",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "favfragment onstop", Toast.LENGTH_SHORT).show();
     }
 }

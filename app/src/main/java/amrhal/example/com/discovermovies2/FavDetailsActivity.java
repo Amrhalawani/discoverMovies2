@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -30,19 +31,19 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fav_details);
+
         setupUi();
-        mCurrentUri = getIntent().getData();
+       // mCurrentUri = getIntent().getData();
         movie_id = getIntent().getExtras().getString("id");
 
-      //  Log.e("TAG", "FavDetailsActivity onCreate: url is" + mCurrentUri.toString());
+        //  Log.e("TAG", "FavDetailsActivity onCreate: url is" + mCurrentUri.toString());
 
         //update ui when onLoadFinished method excuet
-        //todo error heeeeeeeeeeeeeere in loader at pdetails pdetail :192 **********************************
-        //todo i added new uri and after deleted all rows the autoincremeant still increasing
         getLoaderManager().initLoader(0, null, this);
     }
 
     private void setupUi() {
+        Log.e("TAG", "favdetailsactivity opened ");
         movieTitleTV = findViewById(R.id.title_Fav);
         movieAvgTV = findViewById(R.id.avarege_Fav);
         moviereleaseDateTV = findViewById(R.id.releasedate_Fav);
@@ -56,6 +57,8 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Toast.makeText(this, "favdetatils activity onBackPressed", Toast.LENGTH_SHORT).show();
+
         finish();
     }
 
@@ -126,7 +129,7 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
                     .placeholder(R.drawable.user_placeholder)
                     .into(posterIV);
         }
-
+        cursor.close();
     }
 
     @Override
