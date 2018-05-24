@@ -5,9 +5,11 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +35,7 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
         setContentView(R.layout.activity_fav_details);
 
         setupUi();
-       // mCurrentUri = getIntent().getData();
+        // mCurrentUri = getIntent().getData();
         movie_id = getIntent().getExtras().getString("id");
 
         //  Log.e("TAG", "FavDetailsActivity onCreate: url is" + mCurrentUri.toString());
@@ -50,14 +52,24 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
         original = findViewById(R.id.original_titleID_Fav);
         movieOverviewTV = findViewById(R.id.over_viewID_Fav);
         posterIV = findViewById(R.id.poster_detail_fav);
-
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putString("key", movie_id);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        movie_id = savedInstanceState.getString("key");
+    }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Toast.makeText(this, "favdetatils activity onBackPressed", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(this, "favdetatils activity onBackPressed", Toast.LENGTH_SHORT).show();
 
         finish();
     }
@@ -129,7 +141,7 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
                     .placeholder(R.drawable.user_placeholder)
                     .into(posterIV);
         }
-        cursor.close();
+
     }
 
     @Override
@@ -141,5 +153,9 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
         movieAvgTV.setText("");
         original.setText("");
         movieOverviewTV.setText("");
+    }
+
+    public void closeActivity(View view) {
+        finish();
     }
 }

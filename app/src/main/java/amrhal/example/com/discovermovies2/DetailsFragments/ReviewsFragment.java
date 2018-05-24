@@ -100,7 +100,7 @@ public class ReviewsFragment extends Fragment {
     public void onAttach(Context context) {
 
         super.onAttach(context);
-        Toast.makeText(context, "ReviewsFragment launched", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(context, "ReviewsFragment launched", Toast.LENGTH_SHORT).show();
 
     }
 

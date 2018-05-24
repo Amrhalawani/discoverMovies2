@@ -43,7 +43,9 @@
         <!-- android:name=".DetailsActivity" -->
         <!-- android:label="@string/title_activity_pdetails" /> -->
 
-        <activity android:name=".FavDetailsActivity"></activity>
+        <activity android:name=".FavDetailsActivity">
+
+        </activity>
     </application>
 
 </manifest>

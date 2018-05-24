@@ -2,6 +2,7 @@ package amrhal.example.com.discovermovies2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
@@ -16,9 +17,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -54,7 +57,10 @@ public class MainActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
+
     private static final String TAG = "TAG";
+    private static final String RECYCLER_STATE_KEY = "recycler state";
+
     RecyclerView recyclerView;
     List<MovieModel> list;
     RecyclerAdaptor recyclerAdaptor;
@@ -66,6 +72,12 @@ public class MainActivity extends AppCompatActivity {
     FragmentTransaction transaction;
     FavFragment favFragment;
 
+    public static int scrollX = 0;
+    public static int scrollY = -1;
+    ScrollView scrollView;
+
+    private static Bundle mBundleRecyclerViewState; // for save recycler state
+    Parcelable listState;
     public static final String base_url = "http://api.themoviedb.org/3/";
     private static final String api_key = BuildConfig.API_KEY;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -78,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.popularityID:
                     Log.e(TAG, "onNavigationItemSelected: list is empty = " + list.isEmpty());
+
                     transaction.remove(favFragment).commit();
                     if (list.isEmpty()) {
 
@@ -92,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     return true;
                 case R.id.top_ratedID:
+
                     transaction.remove(favFragment).commit();
                     if (list.isEmpty()) {
                         recyclerView.setVisibility(View.GONE);
@@ -122,6 +136,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+       // Toast.makeText(this, "main activity onCreate", Toast.LENGTH_SHORT).show();
+
+        scrollView = findViewById(R.id.scrollView_main);
+
         frag = getFragmentManager();
         favFragment = new FavFragment();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -142,9 +160,34 @@ public class MainActivity extends AppCompatActivity {
             btnRetry.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.VISIBLE);
         }
+
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mBundleRecyclerViewState = new Bundle();
+        listState = recyclerView.getLayoutManager().onSaveInstanceState();
+        mBundleRecyclerViewState.putParcelable(RECYCLER_STATE_KEY, listState);
+    }
+
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+
+        // restore RecyclerView state
+//        if (mBundleRecyclerViewState != null) {
+//            listState = mBundleRecyclerViewState.getParcelable(RECYCLER_STATE_KEY);
+//            recyclerView.getLayoutManager().onRestoreInstanceState(listState);
+//        }
+    }
+
+
     public void getPopularMovies() {
+
 
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(base_url)
@@ -176,19 +219,13 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onItemClick(int position) {
                                 //  Toast.makeText(MainActivity.this, "Clicked on Pos " + position, Toast.LENGTH_LONG).show();
-                                MovieModel movieModel = Util.parsejsonCTmovieObject(jsontResponse,position);
+                                MovieModel movieModel = Util.parsejsonCTmovieObject(jsontResponse, position);
                                 Log.e(TAG, "main onItemClick: movieModel.getTitle()=" + movieModel.getTitle());
 
                                 Intent intent = new Intent(MainActivity.this, PDetailsActivity.class);
                                 intent.putExtra("Movieobject", movieModel);
-
                                 startActivity(intent);
-
-
-                                //  EventBus.getDefault().post(movieModel); here eventBus didn't work due to lifecycle of detailactivity
-                                // String s = "http://www.mechanicalboss.com/wp-content/uploads/2016/07/MECHANICAL_BOSS_Logo_2016_Def_SquareVer_A.jpg";
-                                // EventBus.getDefault().post(new MovieModel("The Show", s, "13/05/2013", "7.9", "بسم الله الرحمن الرحيم ، تيست تيست تيست تيست"));
-                            }
+                                                          }
                         });
 
                     } catch (IOException e) {
@@ -261,26 +298,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-        @Subscribe(threadMode = ThreadMode.MAIN)
-        public void onEventMassege (EventMassege event){
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMassege(EventMassege event) {
 
-            final Snackbar mysnackbar = Snackbar.make(findViewById(R.id.container), event.message,
-                    Snackbar.LENGTH_INDEFINITE);
-            mysnackbar.setAction("Retry", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mysnackbar.dismiss();
-                    getPopularMovies();
-                }
-            })
-                    .show();
-        }
+        final Snackbar mysnackbar = Snackbar.make(findViewById(R.id.container), event.message,
+                Snackbar.LENGTH_INDEFINITE);
+        mysnackbar.setAction("Retry", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mysnackbar.dismiss();
+                getPopularMovies();
+            }
+        })
+                .show();
+    }
 
     public void testEventBus(View view) {
         EventBus.getDefault().post(new EventMassege("First, Check your Internet Connection and then click Retry"));
     }
 
-    }
+}
+
+
 //<integer-array name="deletedMovies">
 //<item>441614</item>
 //<item>337167</item>

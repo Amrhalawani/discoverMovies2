@@ -40,7 +40,7 @@ public class OverviewFragment extends Fragment {
             alloriginal_title = "Original Title: "+ original_title + " (" + original_lang + "). \n";
 
         } else {
-            Toast.makeText(getActivity(), "getArguments() == null", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getActivity(), "getArguments() == null", Toast.LENGTH_SHORT).show();
         }
         View inflatedview = inflater.inflate(R.layout.detailsfrag_overview, container, false);
         TextView overviewTV = inflatedview.findViewById(R.id.over_viewfragmentID);
@@ -65,7 +65,7 @@ public class OverviewFragment extends Fragment {
     public void onAttach(Context context) {
 
         super.onAttach(context);
-        Toast.makeText(context, "OverviewFragment launched", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(context, "OverviewFragment launched", Toast.LENGTH_SHORT).show();
 
     }
 

@@ -56,7 +56,7 @@ public class TrailersFragment extends Fragment {
         if (getArguments() != null) {
             id = getArguments().getString("id");
         } else {
-            Toast.makeText(getActivity(), "list getArguments() videos == null", Toast.LENGTH_SHORT).show();
+         //   Toast.makeText(getActivity(), "list getArguments() videos == null", Toast.LENGTH_SHORT).show();
         }
         list = new ArrayList<>();
         recyclerView = inflatedview.findViewById(R.id.recyclerviewVideosID);
@@ -84,7 +84,7 @@ public class TrailersFragment extends Fragment {
 
                         list = Util.parseJsonMovieVideo(jsonResponse);
                         videosAdaptor.updateData(list);
-                        Toast.makeText(getActivity(), "retrofitResp Videos id =" + id + "  listsize" + list.size(), Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getActivity(), "retrofitResp Videos id =" + id + "  listsize" + list.size(), Toast.LENGTH_SHORT).show();
 
                         videosAdaptor.setOnItemClickListener(new VideosAdaptor.OnItemClickListener() {
                             @Override
@@ -127,7 +127,7 @@ public class TrailersFragment extends Fragment {
     public void onAttach(Context context) {
 
         super.onAttach(context);
-        Toast.makeText(context, "TrailersFragment launched", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(context, "TrailersFragment launched", Toast.LENGTH_SHORT).show();
 
     }
 

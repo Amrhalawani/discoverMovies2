@@ -55,9 +55,6 @@ public class PDetailsActivity extends AppCompatActivity {
     String youtubeUrl = "https://www.youtube.com/watch?v=deWPlnlN_Dc";
     String YoutubeThumbnailUrl = "https://img.youtube.com/vi/kf8X-MtsufY/mqdefault.jpg";
 
-//    To fetch trailers you will want to make a request to the /movie/{id}/videos endpoint.
-//    To fetch reviews you will want to make a request to the /movie/{id}/reviews endpoint.
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -93,7 +90,7 @@ public class PDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pdetails);
 
 
-        //todo fe error elly howa already commit da cuz transaction = frag.beginTransaction() called
+        // fe error elly howa already commit da cuz transaction = frag.beginTransaction() called again
 
         frag = getFragmentManager();
 
@@ -118,7 +115,7 @@ public class PDetailsActivity extends AppCompatActivity {
         navigationEx.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         // toOverviewFragment();  // i think this is not the best practice "the fragment called twice 1st from xml and 2nd here, and in the first one getargumant == null
         navigationEx.setCurrentItem(0); //R.id.overviewFragID didn't work
-       flag =  favstatus();
+        flag = favstatus();
     }
 
 
@@ -147,7 +144,7 @@ public class PDetailsActivity extends AppCompatActivity {
 
 
     private void floatingbuttonhandleClicks() {
-        //this method for handle ckick only not check status before i clicked , so you have to #todo make another method to retreve the status before you click
+        //this method for handle ckick only not check status before i clicked , so you have to #todo make another method to retrieve the status before you click
         // true if first icon is visible, false if second one is visible.
         fab = findViewById(R.id.favButton);
 
@@ -181,8 +178,8 @@ public class PDetailsActivity extends AppCompatActivity {
 
         Cursor cursor = getContentResolver().query(MovieEntry.CONTENT_URiUnknown_id, projection, null, selectionArgs, null);
         int cursurcount = cursor.getCount();
-        if ( cursor.getCount()!=0 && cursor.getCount()!=-1 ) {
-cursor.close(); //todo
+        if (cursor.getCount() != 0 && cursor.getCount() != -1) {
+            cursor.close(); //todo
             fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_fav_checked));
             return false;
         }
@@ -267,6 +264,8 @@ cursor.close(); //todo
         Picasso.get()
                 .load(backdrop_path)
                 .placeholder(R.drawable.user_placeholder)
+                .fit()
+                .centerCrop()
                 .into(backdrop_img);
 
         movieAvgTV.setText(avg);

@@ -41,7 +41,7 @@ public class favCursorAdaptor extends CursorAdapter {
         ImageView imageFavMovie = view.findViewById(R.id.imageviewfavmovie_ID);
         int posterColumnIndex = cursor.getColumnIndex(MovieEntry.COLUMN_POSTER_PATH);
         String posterPathUrl = cursor.getString(posterColumnIndex);
-        Log.e("TAG", "favCursorAdaptor bindView: posterPathUrl" + posterPathUrl);
+        Log.e("TAG", "mfavCursorAdaptor bindView: posterPathUrl" + posterPathUrl);
         Picasso.get()
                 .load(posterPathUrl)
                 .placeholder(R.drawable.user_placeholder)

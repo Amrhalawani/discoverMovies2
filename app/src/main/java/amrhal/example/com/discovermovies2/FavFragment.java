@@ -1,7 +1,6 @@
 package amrhal.example.com.discovermovies2;
 
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -12,7 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import amrhal.example.com.discovermovies2.database.MovieDbHelper;
@@ -27,11 +26,14 @@ import amrhal.example.com.discovermovies2.database.MovieContract.MovieEntry;
 
 
 public class FavFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
-    Cursor cursor ;
+    Cursor cursor;
+    Cursor cursorinitial; //workaround solution or by pass solution :/ for problem "Attempting to access a closed CursorWindow.Most probable cause: cursor is deactivated prior to calling this method."
 
     SQLiteDatabase db;
-    favCursorAdaptor favCursorAdaptor;
+    favCursorAdaptor mfavCursorAdaptor;
     String movie_id;
+    GridView gridView;
+    int gridviewpos;
 
     public FavFragment() {
         // Required empty public constructor
@@ -54,12 +56,12 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
         //  displayDatabaseInfo();
 
         // ListView listView = inflatedview.findViewById(R.id.list);
-        GridView gridView = inflatedview.findViewById(R.id.Gridlist);
+        gridView = inflatedview.findViewById(R.id.Gridlist);
 
-        favCursorAdaptor = new favCursorAdaptor(getActivity(), cursor);
+        mfavCursorAdaptor = new favCursorAdaptor(getActivity(), cursorinitial);
 
-        // listView.setAdapter(favCursorAdaptor);
-        gridView.setAdapter(favCursorAdaptor);
+        // listView.setAdapter(mfavCursorAdaptor);
+        gridView.setAdapter(mfavCursorAdaptor);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = inflatedview.findViewById(R.id.empty_title_text);
@@ -91,18 +93,42 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Toast.makeText(getActivity(), "favfragment onStart", Toast.LENGTH_SHORT).show();
+    public void onResume() {
+        super.onResume();
+        gridView.smoothScrollToPosition(gridviewpos);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        int gridViewFirstVisiblePosition = gridView.getFirstVisiblePosition();
+        outState.putInt("gridViewPosition", gridViewFirstVisiblePosition);
+        Log.e("TAG", "savestate gridview pos=" + gridViewFirstVisiblePosition);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState !=null){
+
+            gridviewpos = savedInstanceState.getInt("gridViewPosition");
+            Log.e("TAG", "StateRestored gridview pos=" + gridviewpos);
+
+        }
+
+    }
 
     @Override
     public void onAttach(Context context) {
 
         super.onAttach(context);
-        Toast.makeText(context, "FavFragment launched", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(context, "FavFragment launched", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -169,20 +195,15 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor1) {
         cursor = cursor1;
-        favCursorAdaptor.swapCursor(cursor1);
-
+        mfavCursorAdaptor.swapCursor(cursor1);
 
 
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        favCursorAdaptor.swapCursor(null);
+        mfavCursorAdaptor.swapCursor(null);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Toast.makeText(getActivity(), "favfragment onstop", Toast.LENGTH_SHORT).show();
-    }
+
 }
