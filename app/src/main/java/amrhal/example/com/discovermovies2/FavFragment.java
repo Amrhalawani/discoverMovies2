@@ -152,6 +152,7 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
         }
     }
 
+    //this method for debbuging only and i set visibailty for this button to gone
     private void insertFakeMovie() {
         ContentValues values = new ContentValues(); //key value
         values.put(MovieEntry.COLUMN_TITLE, "movie");
@@ -164,9 +165,9 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
         Log.e("TAG", "insertFake movie: and newrowid is= " + newUri);
     }
 
+    //this method for debbuging only and i set visibailty for this button to gone
     private void deleteAllMovies() {
-        //this didn't delete auto increment column so the solution is
-        // https://stackoverflow.com/questions/1601697/sqlite-reset-primary-key-field
+        //if didn't delete auto increment column so the soluton https://stackoverflow.com/questions/1601697/sqlite-reset-primary-key-field
         int rowsDeleted = getActivity().getApplicationContext().getContentResolver().delete(MovieEntry.CONTENT_URI, null, null);
         //to empty the table (delete all records) and reset auto increment count.
         db.execSQL("delete from sqlite_sequence where name = 'favmovies'");
