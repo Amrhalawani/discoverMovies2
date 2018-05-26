@@ -47,7 +47,6 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity {
 
 
-
     private static final String TAG = "TAG";
     private static final String RECYCLER_STATE_KEY = "recycler state";
     private static final String PREV_SELECTED_KEY = "prevSelected";
@@ -134,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         // Toast.makeText(this, "main activity onCreate", Toast.LENGTH_SHORT).show();
 
         scrollView = findViewById(R.id.scrollView_main);
+        mBundleRViewState = new Bundle();
 
         frag = getFragmentManager();
         favFragment = new FavFragment();
@@ -159,6 +159,11 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
         }
 
+        if (savedInstanceState != null) {
+            mBundleRViewState.getParcelable(SCROLL_STATE_KEY);
+            Log.e(TAG, "onCreate: mBundleRViewState.getParcelable(SCROLL_STATE_KEY) NOT NUll");
+
+        }
 
     }
 
@@ -193,21 +198,16 @@ public class MainActivity extends AppCompatActivity {
 
                         list = Util.parseJsonCTList(jsontResponse);
                         recyclerAdaptor.updateData(list);
-
-                        Log.e(TAG, "retrofit onResponse: list size = " + list.size());
                         connectTointernetTV.setVisibility(View.INVISIBLE);
                         btnRetry.setVisibility(View.INVISIBLE);
                         progressBar.setVisibility(View.INVISIBLE);
 
                         recyclerView.setSaveEnabled(true);
-
-                        mBundleRViewState = new Bundle();
-                        mBundleRViewState.getParcelable(SCROLL_STATE_KEY);
-
                         if (mBundleRViewState != null) {
                             recyclerView.getLayoutManager().onRestoreInstanceState(mBundleRViewState);
                             Log.e(TAG, "mBundleRViewState != null");
                         }
+
                         recyclerAdaptor.setOnItemClickListener(new RecyclerAdaptor.OnItemClickListener() {
                             @Override
                             public void onItemClick(int position) {
