@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     ScrollView scrollView;
 
     private static Bundle mBundleRViewState; // for save recycler state
+    Parcelable parcelable;
     Parcelable listState;
     public static final String base_url = "http://api.themoviedb.org/3/";
     private static final String api_key = BuildConfig.API_KEY;
@@ -160,10 +161,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState != null) {
-            mBundleRViewState.getParcelable(SCROLL_STATE_KEY);
+            parcelable = savedInstanceState.getParcelable(SCROLL_STATE_KEY);
             Log.e(TAG, "onCreate: mBundleRViewState.getParcelable(SCROLL_STATE_KEY) NOT NUll");
 
         }
+
 
     }
 
@@ -202,9 +204,9 @@ public class MainActivity extends AppCompatActivity {
                         btnRetry.setVisibility(View.INVISIBLE);
                         progressBar.setVisibility(View.INVISIBLE);
 
-                        recyclerView.setSaveEnabled(true);
-                        if (mBundleRViewState != null) {
-                            recyclerView.getLayoutManager().onRestoreInstanceState(mBundleRViewState);
+//                        recyclerView.setSaveEnabled(true);
+                        if (parcelable != null) {
+                            recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
                             Log.e(TAG, "mBundleRViewState != null");
                         }
 
