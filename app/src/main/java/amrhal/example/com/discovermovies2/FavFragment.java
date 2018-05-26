@@ -9,6 +9,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -49,6 +51,11 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
 
         Button btn_deleteAll = inflatedview.findViewById(R.id.btn_deleteAlldataID);
         btn_deleteAll.setOnClickListener(this);
+
+        ImageView btn_back = inflatedview.findViewById(R.id.imagebuttonback);
+        btn_back.setOnClickListener(this);
+
+
 
         MovieDbHelper mDbHelper = new MovieDbHelper(getActivity());
         db = mDbHelper.getReadableDatabase();
@@ -89,6 +96,7 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
             }
         });
 
+
         return inflatedview;
     }
 
@@ -115,7 +123,7 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        if(savedInstanceState !=null){
+        if (savedInstanceState != null) {
 
             gridviewpos = savedInstanceState.getInt("gridViewPosition");
             Log.e("TAG", "StateRestored gridview pos=" + gridviewpos);
@@ -128,7 +136,7 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
     public void onAttach(Context context) {
 
         super.onAttach(context);
-       // Toast.makeText(context, "FavFragment launched", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(context, "FavFragment launched", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -148,6 +156,14 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
                 deleteAllMovies();
 
                 Toast.makeText(getActivity(), "Delete all Movies ", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.imagebuttonback:
+
+                getActivity().getFragmentManager().beginTransaction().remove(getActivity().getFragmentManager().findFragmentById(R.layout.fragment_fav)).commit();
+
+                Toast.makeText(getActivity(), "back pressed ", Toast.LENGTH_SHORT).show();
+
                 break;
         }
     }
@@ -171,7 +187,7 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
         int rowsDeleted = getActivity().getApplicationContext().getContentResolver().delete(MovieEntry.CONTENT_URI, null, null);
         //to empty the table (delete all records) and reset auto increment count.
         db.execSQL("delete from sqlite_sequence where name = 'favmovies'");
-        Log.v("TAG", rowsDeleted + " rows deleted from pet database");
+        Log.e("TAG", rowsDeleted + " rows deleted from pet database");
     }
 
 

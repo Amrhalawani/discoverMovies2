@@ -3,6 +3,7 @@ package amrhal.example.com.discovermovies2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
@@ -17,11 +18,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -46,20 +45,14 @@ import retrofit2.Retrofit;
 
 
 public class MainActivity extends AppCompatActivity {
-    @Override
-    protected void onStart() {
-        EventBus.getDefault().register(this);
-        super.onStart();
-    }
 
-    @Override
-    protected void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
+
 
     private static final String TAG = "TAG";
     private static final String RECYCLER_STATE_KEY = "recycler state";
+    private static final String PREV_SELECTED_KEY = "prevSelected";
+    private static final String SCROLL_STATE_KEY = "scrollstate";
+    private static final String SAVED_LAYOUT_MANAGER = "savedLayoutmanger";
 
     RecyclerView recyclerView;
     List<MovieModel> list;
@@ -72,11 +65,13 @@ public class MainActivity extends AppCompatActivity {
     FragmentTransaction transaction;
     FavFragment favFragment;
 
+    BottomNavigationView navigation;
+
     public static int scrollX = 0;
     public static int scrollY = -1;
     ScrollView scrollView;
 
-    private static Bundle mBundleRecyclerViewState; // for save recycler state
+    private static Bundle mBundleRViewState; // for save recycler state
     Parcelable listState;
     public static final String base_url = "http://api.themoviedb.org/3/";
     private static final String api_key = BuildConfig.API_KEY;
@@ -136,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       // Toast.makeText(this, "main activity onCreate", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, "main activity onCreate", Toast.LENGTH_SHORT).show();
 
         scrollView = findViewById(R.id.scrollView_main);
 
@@ -149,10 +144,13 @@ public class MainActivity extends AppCompatActivity {
         btnRetry = findViewById(R.id.button);
         progressBar = findViewById(R.id.progress);
         recyclerView = findViewById(R.id.recyclerviewID);
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         getPopularMovies();
+
+
         Log.e(TAG, "onCreate: list size=" + list.size());
         if (list.isEmpty()) {
             Log.e(TAG, "on Create (for visibility) when list.is empty= " + list.isEmpty());
@@ -161,28 +159,15 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
         }
 
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        mBundleRecyclerViewState = new Bundle();
-        listState = recyclerView.getLayoutManager().onSaveInstanceState();
-        mBundleRecyclerViewState.putParcelable(RECYCLER_STATE_KEY, listState);
     }
 
 
     @Override
-    protected void onResume() {
-
-        super.onResume();
-
-        // restore RecyclerView state
-//        if (mBundleRecyclerViewState != null) {
-//            listState = mBundleRecyclerViewState.getParcelable(RECYCLER_STATE_KEY);
-//            recyclerView.getLayoutManager().onRestoreInstanceState(listState);
-//        }
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        //  outState.putInt(PREV_SELECTED_KEY, navigation.getSelectedItemId());
+        outState.putParcelable(SCROLL_STATE_KEY, recyclerView.getLayoutManager().onSaveInstanceState());
     }
 
 
@@ -214,7 +199,15 @@ public class MainActivity extends AppCompatActivity {
                         btnRetry.setVisibility(View.INVISIBLE);
                         progressBar.setVisibility(View.INVISIBLE);
 
+                        recyclerView.setSaveEnabled(true);
 
+                        mBundleRViewState = new Bundle();
+                        mBundleRViewState.getParcelable(SCROLL_STATE_KEY);
+
+                        if (mBundleRViewState != null) {
+                            recyclerView.getLayoutManager().onRestoreInstanceState(mBundleRViewState);
+                            Log.e(TAG, "mBundleRViewState != null");
+                        }
                         recyclerAdaptor.setOnItemClickListener(new RecyclerAdaptor.OnItemClickListener() {
                             @Override
                             public void onItemClick(int position) {
@@ -225,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                                 Intent intent = new Intent(MainActivity.this, PDetailsActivity.class);
                                 intent.putExtra("Movieobject", movieModel);
                                 startActivity(intent);
-                                                          }
+                            }
                         });
 
                     } catch (IOException e) {
@@ -297,6 +290,19 @@ public class MainActivity extends AppCompatActivity {
 
         });
     }
+
+    @Override
+    protected void onStart() {
+        EventBus.getDefault().register(this);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMassege(EventMassege event) {

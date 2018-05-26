@@ -34,6 +34,8 @@ public class RecyclerAdaptor extends RecyclerView.Adapter<RecyclerAdaptor.myView
         //  layoutInflater = LayoutInflater.from(context);
     }
 
+
+
     @Override
     public myViewholder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.e(TAG, "onCreateViewHolder: ");

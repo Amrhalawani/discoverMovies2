@@ -28,6 +28,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent" />
 
+
     <!--<ListView-->
     <!--android:id="@+id/list"-->
     <!--android:layout_width="match_parent"-->
@@ -69,5 +70,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imagebuttonback"
+        android:layout_width="55dp"
+        android:layout_height="50dp"
+        android:alpha="0.6"
+        android:backgroundTint="#2a3a56"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
 
 </android.support.constraint.ConstraintLayout>
