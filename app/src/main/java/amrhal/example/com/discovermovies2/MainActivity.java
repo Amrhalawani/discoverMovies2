@@ -48,10 +48,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     private static final String TAG = "TAG";
+    private static final String SAVESTATE = "saveinstance";
+
     private static final String RECYCLER_STATE_KEY = "recycler state";
-    private static final String PREV_SELECTED_KEY = "prevSelected";
     private static final String SCROLL_STATE_KEY = "scrollstate";
     private static final String SAVED_LAYOUT_MANAGER = "savedLayoutmanger";
+
 
     RecyclerView recyclerView;
     List<MovieModel> list;
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static Bundle mBundleRViewState; // for save recycler state
     Parcelable parcelable;
-    Parcelable listState;
+
     public static final String base_url = "http://api.themoviedb.org/3/";
     private static final String api_key = BuildConfig.API_KEY;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -131,10 +133,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Toast.makeText(this, "main activity onCreate", Toast.LENGTH_SHORT).show();
-
-        scrollView = findViewById(R.id.scrollView_main);
-        mBundleRViewState = new Bundle();
 
         frag = getFragmentManager();
         favFragment = new FavFragment();
@@ -144,15 +142,12 @@ public class MainActivity extends AppCompatActivity {
         connectTointernetTV = findViewById(R.id.emptyViewID);
         btnRetry = findViewById(R.id.button);
         progressBar = findViewById(R.id.progress);
-        recyclerView = findViewById(R.id.recyclerviewID);
-        navigation = findViewById(R.id.navigation);
 
+        recyclerView = findViewById(R.id.recyclerviewID);
+        recyclerView.setSaveEnabled(true);
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        getPopularMovies();
-
-
-        Log.e(TAG, "onCreate: list size=" + list.size());
         if (list.isEmpty()) {
             Log.e(TAG, "on Create (for visibility) when list.is empty= " + list.isEmpty());
             connectTointernetTV.setVisibility(View.VISIBLE);
@@ -160,26 +155,23 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
         }
 
+
         if (savedInstanceState != null) {
-            parcelable = savedInstanceState.getParcelable(SCROLL_STATE_KEY);
-            Log.e(TAG, "onCreate: mBundleRViewState.getParcelable(SCROLL_STATE_KEY) NOT NUll");
-
+            mBundleRViewState = savedInstanceState;
         }
-
-
+        getPopularMovies();
     }
 
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-        //  outState.putInt(PREV_SELECTED_KEY, navigation.getSelectedItemId());
+
         outState.putParcelable(SCROLL_STATE_KEY, recyclerView.getLayoutManager().onSaveInstanceState());
     }
 
 
     public void getPopularMovies() {
-
 
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(base_url)
@@ -204,18 +196,21 @@ public class MainActivity extends AppCompatActivity {
                         btnRetry.setVisibility(View.INVISIBLE);
                         progressBar.setVisibility(View.INVISIBLE);
 
-//                        recyclerView.setSaveEnabled(true);
-                        if (parcelable != null) {
+                        if (mBundleRViewState != null) {
+                            parcelable = mBundleRViewState.getParcelable(SCROLL_STATE_KEY);
                             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
-                            Log.e(TAG, "mBundleRViewState != null");
+                            Log.e(SAVESTATE, "mBundleRViewState NOT NULL");
+                        }
+
+                        if (mBundleRViewState == null) {
+                            Log.e(SAVESTATE, "mBundleRViewState NULL");
                         }
 
                         recyclerAdaptor.setOnItemClickListener(new RecyclerAdaptor.OnItemClickListener() {
                             @Override
                             public void onItemClick(int position) {
-                                //  Toast.makeText(MainActivity.this, "Clicked on Pos " + position, Toast.LENGTH_LONG).show();
+
                                 MovieModel movieModel = Util.parsejsonCTmovieObject(jsontResponse, position);
-                                Log.e(TAG, "main onItemClick: movieModel.getTitle()=" + movieModel.getTitle());
 
                                 Intent intent = new Intent(MainActivity.this, PDetailsActivity.class);
                                 intent.putExtra("Movieobject", movieModel);
@@ -366,35 +361,3 @@ public class MainActivity extends AppCompatActivity {
 //        iterator.remove();
 //        break;
 //}}}}
-
-//
-//
-//    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//        try {
-//            String JsonBody = "";
-//            if (response.body() != null) {
-//                JsonBody = response.body().string();
-//
-//                recyclerView = findViewById(R.id.recyclerviewID);
-//                recyclerAdaptor = new RecyclerAdaptor(MainActivity.this);
-//                recyclerView.setAdapter(recyclerAdaptor);
-//                recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-//
-//                list = Util.parseJsonCTList(JsonBody);
-//                recyclerAdaptor.updateData(list);
-//                btnRetry.setVisibility(View.INVISIBLE);
-//                progressBar.setVisibility(View.INVISIBLE);
-//                //MovieModel movieModel = list.get(0);
-//
-//                final String finalJsonBody = JsonBody;
-//                recyclerAdaptor.setOnItemClickListener(new RecyclerAdaptor.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(int position) {
-//                        //   Toast.makeText(MainActivity.this, "Clicked on Pos " + position, Toast.LENGTH_LONG).show();
-//                        Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-//                        MovieModel movieModel = Util.parsejsonCTmovieObject(finalJsonBody, position);
-//                        intent.putExtra("testparcelable", movieModel);
-//                        intent.putExtra(DetailsActivity.EXTRA_POSITION, position);
-//                        startActivity(intent);
-//                    }
-//                });
