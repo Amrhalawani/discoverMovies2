@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 
@@ -50,10 +49,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "TAG";
     private static final String SAVESTATE = "saveinstance";
 
-    private static final String RECYCLER_STATE_KEY = "recycler state";
     private static final String SCROLL_STATE_KEY = "scrollstate";
-    private static final String SAVED_LAYOUT_MANAGER = "savedLayoutmanger";
-
+    private static final String MOVIE_LIST_KEY = "movielistkey";
+    String fragemnt_TAG;
 
     RecyclerView recyclerView;
     List<MovieModel> list;
@@ -62,18 +60,15 @@ public class MainActivity extends AppCompatActivity {
     TextView connectTointernetTV;
     ProgressBar progressBar;
 
-    FragmentManager frag;
+    FragmentManager fragMan;
     FragmentTransaction transaction;
     FavFragment favFragment;
 
     BottomNavigationView navigation;
 
-    public static int scrollX = 0;
-    public static int scrollY = -1;
-    ScrollView scrollView;
-
     private static Bundle mBundleRViewState; // for save recycler state
     Parcelable parcelable;
+    GridLayoutManager gridLayoutManager;
 
     public static final String base_url = "http://api.themoviedb.org/3/";
     private static final String api_key = BuildConfig.API_KEY;
@@ -82,7 +77,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            transaction = frag.beginTransaction();
+
+
+            transaction = fragMan.beginTransaction();
             switch (item.getItemId()) {
 
                 case R.id.popularityID:
@@ -116,8 +113,10 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.fev_movies:
-                    if (!favFragment.isAdded()) {
-                        transaction.add(R.id.container, favFragment).commit();
+
+                    if (fragMan.findFragmentByTag(fragemnt_TAG) == null) {
+
+                        transaction.add(R.id.container, favFragment,fragemnt_TAG).commit();
                         return true;
                     } else {
                         Log.e(TAG, "onNavigationItemSelected: fragment already added");
@@ -134,8 +133,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        frag = getFragmentManager();
-        favFragment = new FavFragment();
+        fragMan = getFragmentManager();
+        fragemnt_TAG = "fav_fragment";
+
+            favFragment = new FavFragment();
+
+
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         list = new ArrayList<>();
@@ -145,6 +148,11 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerviewID);
         recyclerView.setSaveEnabled(true);
+        recyclerAdaptor = new RecyclerAdaptor(MainActivity.this);
+        gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+
         navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -156,24 +164,35 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if (savedInstanceState != null) {
-            mBundleRViewState = savedInstanceState;
-        }
+//        if (savedInstanceState != null) {
+//            mBundleRViewState = savedInstanceState;
+//            parcelable = savedInstanceState.getParcelable(SCROLL_STATE_KEY);
+//
+//            if (parcelable != null) {
+//                recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
+//  //              recyclerView.setAdapter(recyclerAdaptor);
+//            }
+//        }
+
         getPopularMovies();
+
+
     }
 
-
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-
-        outState.putParcelable(SCROLL_STATE_KEY, recyclerView.getLayoutManager().onSaveInstanceState());
-    }
+//
+//    @Override
+//    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+//        super.onSaveInstanceState(outState, outPersistentState);
+//
+//        outState.putParcelableArrayList(MOVIE_LIST_KEY, (ArrayList<MovieModel>) list);
+//        outState.putParcelable(SCROLL_STATE_KEY, recyclerView.getLayoutManager().onSaveInstanceState());
+//
+//    }
 
 
     public void getPopularMovies() {
 
-        final Retrofit retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(base_url)
                 .build();
 
@@ -183,9 +202,6 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 if (response.body() != null) {
-                    recyclerAdaptor = new RecyclerAdaptor(MainActivity.this);
-                    recyclerView.setAdapter(recyclerAdaptor);
-                    recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
 
                     try {
                         final String jsontResponse = response.body().string();
@@ -196,15 +212,7 @@ public class MainActivity extends AppCompatActivity {
                         btnRetry.setVisibility(View.INVISIBLE);
                         progressBar.setVisibility(View.INVISIBLE);
 
-                        if (mBundleRViewState != null) {
-                            parcelable = mBundleRViewState.getParcelable(SCROLL_STATE_KEY);
-                            recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
-                            Log.e(SAVESTATE, "mBundleRViewState NOT NULL");
-                        }
-
-                        if (mBundleRViewState == null) {
-                            Log.e(SAVESTATE, "mBundleRViewState NULL");
-                        }
+                        recyclerView.setAdapter(recyclerAdaptor);
 
                         recyclerAdaptor.setOnItemClickListener(new RecyclerAdaptor.OnItemClickListener() {
                             @Override
@@ -233,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
     public void getTopRatedMovies() {
         final Retrofit retrofit = new Retrofit.Builder().baseUrl(base_url).build();
         MoviesInterface moviesInterface = retrofit.create(MoviesInterface.class);
@@ -254,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
                         recyclerAdaptor.updateData(list);
                         btnRetry.setVisibility(View.INVISIBLE);
                         progressBar.setVisibility(View.INVISIBLE);
-                        //MovieModel movieModel = list.get(0);
 
                         final String finalJsonBody = JsonBody;
                         recyclerAdaptor.setOnItemClickListener(new RecyclerAdaptor.OnItemClickListener() {

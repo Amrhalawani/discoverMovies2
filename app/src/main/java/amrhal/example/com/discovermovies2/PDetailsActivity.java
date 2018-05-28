@@ -90,7 +90,7 @@ public class PDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pdetails);
 
 
-        // fe error elly howa already commit da cuz transaction = frag.beginTransaction() called again
+        // fe error elly howa already commit da cuz transaction = fragMan.beginTransaction() called again
 
         frag = getFragmentManager();
 

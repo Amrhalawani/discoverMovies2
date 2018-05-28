@@ -20,7 +20,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ScrollView;
+
 import android.widget.Toast;
 
 import amrhal.example.com.discovermovies2.database.MovieDbHelper;
@@ -36,6 +36,7 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
     String movie_id;
     GridView gridView;
     int gridviewpos;
+
 
     public FavFragment() {
         // Required empty public constructor
@@ -139,6 +140,7 @@ public class FavFragment extends Fragment implements View.OnClickListener, Loade
         // Toast.makeText(context, "FavFragment launched", Toast.LENGTH_SHORT).show();
 
     }
+
 
 
     @Override
