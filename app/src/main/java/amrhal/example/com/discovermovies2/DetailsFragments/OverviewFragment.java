@@ -55,14 +55,14 @@ public class OverviewFragment extends Fragment {
 
         return inflatedview;
     }
-    
+
 
 
     @Override
     public void onAttach(Context context) {
 
         super.onAttach(context);
-        Toast.makeText(context, "OverviewFragment launched", Toast.LENGTH_SHORT).show();
+
 
     }
 

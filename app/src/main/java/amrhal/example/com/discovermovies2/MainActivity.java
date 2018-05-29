@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
             //navigation.setSelectedItemId(R.id.top_ratedID);
 
         }
-//todo getpopularmovies
+
 
     }
 //

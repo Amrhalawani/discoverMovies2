@@ -290,7 +290,7 @@ public class PDetailsActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        finish();
+
     }
 
 

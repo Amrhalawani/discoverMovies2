@@ -30,6 +30,7 @@ public class VideosAdaptor extends RecyclerView.Adapter<VideosAdaptor.myViewhold
     LayoutInflater layoutInflater;
     public OnItemClickListener onItemClickListener;
     String YoutubeThumbnailbase = "https://img.youtube.com/vi/kf8X-MtsufY/mqdefault.jpg";
+
     String youtubekey;
 
     public VideosAdaptor(Context context) {
@@ -60,6 +61,7 @@ public class VideosAdaptor extends RecyclerView.Adapter<VideosAdaptor.myViewhold
         VideoModel videoModel = list.get(position);
 
         holder.name.setText(videoModel.getmName());
+
         youtubekey = videoModel.getKey();
 
         Picasso.get()
@@ -91,16 +93,23 @@ public class VideosAdaptor extends RecyclerView.Adapter<VideosAdaptor.myViewhold
         this.onItemClickListener = onItemClickListener;
     }
 
+
+//-------------------------------------------------------------------------------------------
+
+
     class myViewholder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;
         ImageView thumbnail;
+        ImageView play;
 
         public myViewholder(View itemView) {
             super(itemView);
             Log.e(TAG, "myViewholder: ");
             name = itemView.findViewById(R.id.video_nameID);
             thumbnail = itemView.findViewById(R.id.video_thumbnial);
+            play = itemView.findViewById(R.id.video_play);
             thumbnail.setOnClickListener(this);
+
         }
 
         @Override
