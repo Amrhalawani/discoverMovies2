@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -152,7 +153,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerviewID);
         recyclerView.setSaveEnabled(true);
         recyclerAdaptor = new RecyclerAdaptor(MainActivity.this);
-        gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
+        gridLayoutManager = new GridLayoutManager(MainActivity.this, numberOfColumns());
+
+
         recyclerView.setLayoutManager(gridLayoutManager);
 
 
@@ -200,6 +203,17 @@ public class MainActivity extends AppCompatActivity {
 //
 //    }
 
+
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        // You can change this divider to adjust the size of the poster
+        int widthDivider = 400;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 2) return 2; //to keep the grid aspect
+        return nColumns;
+    }
 
     public void getPopularMovies() {
 
