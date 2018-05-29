@@ -8,7 +8,10 @@ import android.net.Uri;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,6 +40,15 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
         setupUi();
         // mCurrentUri = getIntent().getData();
         movie_id = getIntent().getExtras().getString("id");
+
+        Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+       // myToolbar.setTitle("Favorite Movie");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getSupportActionBar().setTitle(Html.fromHtml("<font color='#aaaaaa'>" + "Favorite Movie" + "</font>"));
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //  Log.e("TAG", "FavDetailsActivity onCreate: url is" + mCurrentUri.toString());
 
@@ -69,9 +81,7 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-      //  Toast.makeText(this, "favdetatils activity onBackPressed", Toast.LENGTH_SHORT).show();
-
-        finish();
+            finish();
     }
 
 
@@ -155,7 +165,13 @@ public class FavDetailsActivity extends AppCompatActivity implements LoaderManag
         movieOverviewTV.setText("");
     }
 
-    public void closeActivity(View view) {
-        finish();
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
+
 }
