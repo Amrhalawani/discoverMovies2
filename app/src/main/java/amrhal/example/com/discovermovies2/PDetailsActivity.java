@@ -93,12 +93,8 @@ public class PDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         setContentView(R.layout.activity_pdetails);
-//        if (savedInstanceState != null) {
-//            movieModel = savedInstanceState.getParcelable(MOVIE_MODEL_KEY);
-//
-//        } else {
-            movieModel = getIntent().getExtras().getParcelable("Movieobject");
-       // }
+
+        movieModel = getIntent().getExtras().getParcelable("Movieobject");
 
         // fe error elly howa already commit da cuz transaction = fragMan.beginTransaction() called again
 
@@ -154,7 +150,7 @@ public class PDetailsActivity extends AppCompatActivity {
 
 
     private void floatingbuttonhandleClicks() {
-        //this method for handle ckick only not check status before i clicked , so you have to #todo make another method to retrieve the status before you click
+        //this method for handle ckick only not check status before i clicked , so you have to
         // true if first icon is visible, false if second one is visible.
         fab = findViewById(R.id.favButton);
 
@@ -240,14 +236,6 @@ public class PDetailsActivity extends AppCompatActivity {
 
     }
 
-    @Override
-
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-
-        outState.putParcelable(MOVIE_MODEL_KEY, movieModel);
-
-    }
 
 
     private void updateUI1() {

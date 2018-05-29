@@ -55,30 +55,7 @@ public class OverviewFragment extends Fragment {
 
         return inflatedview;
     }
-
-//
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//
-//        outState.putString("SynopsisKey", Synopsis);
-//        outState.putString("alloriginal_title_Key", alloriginal_title);
-//
-//        Log.e("TAG", "OVERVIEW Fragemnt savestate = synopsis"+ Synopsis);
-//    }
-
-//    @Override
-//    public void onViewStateRestored(Bundle savedInstanceState) {
-//        super.onViewStateRestored(savedInstanceState);
-//        if (savedInstanceState != null) {
-//
-//            Synopsis = savedInstanceState.getString("SynopsisKey");
-//            alloriginal_title = savedInstanceState.getString("alloriginal_title_Key");
-//
-//            Log.e("TAG", "OVERVIEW Fragemnt savestate = synopsis"+ Synopsis);
-//        }
-//
-//    }
+    
 
 
     @Override
