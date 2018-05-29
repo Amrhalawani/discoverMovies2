@@ -1,6 +1,7 @@
 package amrhal.example.com.discovermovies2;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
@@ -48,9 +49,14 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "TAG";
     private static final String SAVESTATE = "saveinstance";
-
     private static final String SCROLL_STATE_KEY = "scrollstate";
     private static final String MOVIE_LIST_KEY = "movielistkey";
+    private static final String SHAREDP_KEY = "sharedname";
+    private static final String SHAREDP_INT_KEY = "poportop";
+    int POPorTOP = 0;
+    static final int POPselected = 0;
+    static final int TOPselected = 1;
+
     String fragemnt_TAG;
 
     RecyclerView recyclerView;
@@ -74,16 +80,14 @@ public class MainActivity extends AppCompatActivity {
     private static final String api_key = BuildConfig.API_KEY;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-
             transaction = fragMan.beginTransaction();
             switch (item.getItemId()) {
 
                 case R.id.popularityID:
-                    Log.e(TAG, "onNavigationItemSelected: list is empty = " + list.isEmpty());
+
+                    getSharedPreferences(SHAREDP_KEY, MODE_PRIVATE).edit().putInt(SHAREDP_INT_KEY, POPselected).commit();
 
                     transaction.remove(favFragment).commit();
                     if (list.isEmpty()) {
@@ -99,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     return true;
                 case R.id.top_ratedID:
+
+                    boolean a = getSharedPreferences(SHAREDP_KEY, MODE_PRIVATE).edit().putInt(SHAREDP_INT_KEY, TOPselected).commit();
 
                     transaction.remove(favFragment).commit();
                     if (list.isEmpty()) {
@@ -116,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (fragMan.findFragmentByTag(fragemnt_TAG) == null) {
 
-                        transaction.add(R.id.container, favFragment,fragemnt_TAG).commit();
+                        transaction.add(R.id.container, favFragment, fragemnt_TAG).commit();
                         return true;
                     } else {
                         Log.e(TAG, "onNavigationItemSelected: fragment already added");
@@ -127,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,9 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragMan = getFragmentManager();
         fragemnt_TAG = "fav_fragment";
-
-            favFragment = new FavFragment();
-
+        favFragment = new FavFragment();
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
@@ -173,12 +176,19 @@ public class MainActivity extends AppCompatActivity {
 //  //              recyclerView.setAdapter(recyclerAdaptor);
 //            }
 //        }
+        POPorTOP = getSharedPreferences(SHAREDP_KEY, MODE_PRIVATE).getInt(SHAREDP_INT_KEY, 0);
+        if (POPorTOP == POPselected) {
+            // navigation.setSelectedItemId();
+            getPopularMovies();
 
-        getPopularMovies();
+        } else if (POPorTOP == TOPselected) {
+            getTopRatedMovies();
+            //navigation.setSelectedItemId(R.id.top_ratedID);
 
+        }
+//todo getpopularmovies
 
     }
-
 //
 //    @Override
 //    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
@@ -186,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        outState.putParcelableArrayList(MOVIE_LIST_KEY, (ArrayList<MovieModel>) list);
 //        outState.putParcelable(SCROLL_STATE_KEY, recyclerView.getLayoutManager().onSaveInstanceState());
+//
 //
 //    }
 
@@ -254,15 +265,13 @@ public class MainActivity extends AppCompatActivity {
                     if (response.body() != null) {
                         JsonBody = response.body().string();
 
-                        recyclerView = findViewById(R.id.recyclerviewID);
-                        recyclerAdaptor = new RecyclerAdaptor(MainActivity.this);
-                        recyclerView.setAdapter(recyclerAdaptor);
-                        recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-
                         list = Util.parseJsonCTList(JsonBody);
                         recyclerAdaptor.updateData(list);
+                        connectTointernetTV.setVisibility(View.INVISIBLE);
                         btnRetry.setVisibility(View.INVISIBLE);
                         progressBar.setVisibility(View.INVISIBLE);
+
+                        recyclerView.setAdapter(recyclerAdaptor);
 
                         final String finalJsonBody = JsonBody;
                         recyclerAdaptor.setOnItemClickListener(new RecyclerAdaptor.OnItemClickListener() {

@@ -60,13 +60,13 @@ public class RecyclerAdaptor extends RecyclerView.Adapter<RecyclerAdaptor.myView
                 .placeholder(R.drawable.user_placeholder)
                 .into(holder.imageView);
 
-        Log.e("tag", "on bind ");
+
     }
 
 
     @Override
     public int getItemCount() {
-        Log.e(TAG, "getItemCount: list.size = " + list.size());
+
         return list.size();
     }
 

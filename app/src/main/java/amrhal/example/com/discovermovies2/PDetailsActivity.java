@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -34,6 +35,8 @@ import amrhal.example.com.discovermovies2.database.MovieContract.MovieEntry;
 public class PDetailsActivity extends AppCompatActivity {
     public static String pic_base_url = "http://image.tmdb.org/t/p/";
     public static String pic_size_url = "w185";
+    public static String MOVIE_MODEL_KEY = "moviemodel";
+
 
     String title, poster, avg, date, Synopsis, original_lang, original_title, id, backdrop_path;
     boolean adult;
@@ -54,6 +57,8 @@ public class PDetailsActivity extends AppCompatActivity {
     String url = "http://api.themoviedb.org/3/movie/539/videos?api_key=";
     String youtubeUrl = "https://www.youtube.com/watch?v=deWPlnlN_Dc";
     String YoutubeThumbnailUrl = "https://img.youtube.com/vi/kf8X-MtsufY/mqdefault.jpg";
+
+    MovieModel movieModel;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -88,7 +93,12 @@ public class PDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         setContentView(R.layout.activity_pdetails);
-
+//        if (savedInstanceState != null) {
+//            movieModel = savedInstanceState.getParcelable(MOVIE_MODEL_KEY);
+//
+//        } else {
+            movieModel = getIntent().getExtras().getParcelable("Movieobject");
+       // }
 
         // fe error elly howa already commit da cuz transaction = fragMan.beginTransaction() called again
 
@@ -114,7 +124,7 @@ public class PDetailsActivity extends AppCompatActivity {
 
         navigationEx.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         // toOverviewFragment();  // i think this is not the best practice "the fragment called twice 1st from xml and 2nd here, and in the first one getargumant == null
-        navigationEx.setCurrentItem(0); //R.id.overviewFragID didn't work
+        navigationEx.setCurrentItem(0); //this is good
         flag = favstatus();
     }
 
@@ -227,13 +237,22 @@ public class PDetailsActivity extends AppCompatActivity {
         // movieOverviewTV = findViewById(R.id.over_view);
         posterIV = findViewById(R.id.poster_detail);
         backdrop_img = findViewById(R.id.backImagecollapsedID);
-        //fragments
+
     }
+
+    @Override
+
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        outState.putParcelable(MOVIE_MODEL_KEY, movieModel);
+
+    }
+
 
     private void updateUI1() {
         //   MovieModel movieModel = new MovieModel("ahmed","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg ", "10/10/2010","5.9", "sadasda", "10", "156", "10", "1dasd", false);
 
-        MovieModel movieModel = getIntent().getExtras().getParcelable("Movieobject");
 
         title = movieModel.getTitle();
 
@@ -283,6 +302,7 @@ public class PDetailsActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
+        finish();
     }
 
 
