@@ -23,3 +23,16 @@ eventBus,
 BottomNavigationViewEx,
 Picasso.
 # ScreenShots
+
+
+![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527671731.png?raw=true "Popularity")
+![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527671772.png?raw=true "Popularity")
+![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527671849.png?raw=true "Popularity")
+![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527671876.png?raw=true "Popularity")
+![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527671891.png?raw=true "Popularity")
+![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527671919.png?raw=true "Popularity")
+![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527671967.png?raw=true "Popularity")
+![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/a25ca07a-3eda-496a-977e-435a35cf8fb9.jfif?raw=true "Popularity")
+![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527672069.png?raw=true "Popularity")
+![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527672298.png?raw=true "Popularity")
+![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527672701.png?raw=true "Popularity")
