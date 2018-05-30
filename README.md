@@ -19,6 +19,7 @@ this is only Stage no. 2 from 2 stages, my app works with TMDb API.
 
 # External dependencies used
 Retrofit,
-Picasso,
-eventBus.
+eventBus,
+BottomNavigationViewEx,
+Picasso.
 # ScreenShots
