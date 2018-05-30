@@ -4,8 +4,8 @@
 DiscoverMovies Project is a part of Udacity Nanodegree scholarship(AND) 2018
 
 # Description
-An app to help users discover popular and top rated movies. It has a clean UI, sync to a server, and present information to the user. 
-this is only Stage no. 2 from 2 stages, my app works with TMDb API.
+An app to help users discover popular and top rated movies. It has a clean UI, sync to TMDB server, and present information to the user. there are SQLite database to save your favorites with Content provider layer,
+this app works with TMDb API so you have to get your "APikey" first and put it to gradle properties file.
 
 # User Experience
 
@@ -14,16 +14,16 @@ this is only Stage no. 2 from 2 stages, my app works with TMDb API.
         The sort order can be by most popular, or by highest-rated.
     Allow the user to tap on a movie poster and transition to a details screen with additional information such as
         inf0 : original title, movie poster image thumbnail, A plot synopsis, avarege rating, release date.
-        trailers:
-        Reviews:
+        trailers: you can watch videos on your youtube app just by one click, and otherwise by any browser you have. 
+        Reviews: some users review about an movie
 
 # External dependencies used
 Retrofit,
 eventBus,
 BottomNavigationViewEx,
 Picasso.
-# ScreenShots
 
+# ScreenShots
 
 ![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527671731.png?raw=true "Popularity")
 ![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527671772.png?raw=true "Popularity")
