@@ -1,5 +1,3 @@
-# discoverMovies2
-
 # Discover Movies (Stage 2)
 DiscoverMovies Project is a part of Udacity Nanodegree scholarship(AND) 2018
 
