@@ -20,6 +20,12 @@ eventBus,
 BottomNavigationViewEx,
 Picasso.
 
+## Installation
+
+- You will first need to apply for an API key (v3 auth) from [TheMovieDB](https://www.themoviedb.org/)
+-then you need to enter your API key in the project's gradle.properties file:
+    ```API_KEY="(your API key)"```
+
 # ScreenShots
 
 ![alt text](https://github.com/Amrhalawani/discoverMovies2/blob/master/screenshots/Screenshot_1527671731.png?raw=true "Popularity")
