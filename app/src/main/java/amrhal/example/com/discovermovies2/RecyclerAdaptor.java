@@ -97,10 +97,10 @@ public class RecyclerAdaptor extends RecyclerView.Adapter<RecyclerAdaptor.myView
         }
 
         @Override
-        public void onClick(View view) {
-            if (onItemClickListener != null)
-                onItemClickListener.onItemClick(getAdapterPosition());
-        }
+    public void onClick(View view) {
+        if (onItemClickListener != null)
+            onItemClickListener.onItemClick(getAdapterPosition());
     }
+}
 
 }
